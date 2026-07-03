@@ -4,11 +4,15 @@
 #include "system.h"
 #include "uniformBuffer.h"
 #include "vulkan/vulkan.hpp"
+#include <Nova/Core/macros.h>
+#include <SDL3/SDL_log.h>
 #include <cassert>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 #include <vulkan/vulkan.hpp>
 #include <vulkan/vulkan_core.h>
+#include <unordered_set>
 
 namespace Nova::GE {
 
@@ -35,7 +39,6 @@ namespace Nova::GE {
         void init(VmaAllocator allocator, DevicePackage device, vk::PhysicalDeviceDescriptorBufferPropertiesEXT decsProps, size_t size = 1024 * 1024);
         void shutdown(VmaAllocator allocator);
 
-        // ── Queries ───────────────────────────────────────────────────
         usize getCurrentOffset() const { return m_offset; }
         vk::Buffer buffer()      const { return m_buffer; }
 
@@ -51,7 +54,25 @@ namespace Nova::GE {
             return offset;
         }
 
-        // ── Allocation ────────────────────────────────────────────────
+        u32 allocateTextureSlot() {
+            std::lock_guard lock(m_textureMutex);
+            if (m_freeTextureSlots.empty()) NERROR("bindless texture array exhausted");
+            u32 slot = m_freeTextureSlots.back();
+            m_freeTextureSlots.pop_back();
+            return slot;
+        }
+        
+        void freeTextureSlot(u32 slot) {
+            std::lock_guard lock(m_textureMutex);
+            m_freeTextureSlots.push_back(slot);
+        }
+
+        void writeTextureSlot(u32 slot, vk::ImageView view, vk::ImageLayout layout) {
+            usize bindingOff = getBindingOffset(m_bindlessSet.layout, m_bindlessBinding);
+            usize elemOff = bindingOff + slot * m_descProps.sampledImageDescriptorSize;
+            _writeSampledImage(view, layout, m_bindlessSet.baseOffset + elemOff);
+        }
+
         // Reserve space for a full descriptor set, returns base offset
         SetHandle allocateSet(vk::DescriptorSetLayout setLayout, u32 setIndex);
 
@@ -75,6 +96,7 @@ namespace Nova::GE {
         void _writeSampler(vk::Sampler sampler, usize atOffset);
         void _writeSampledImage(vk::ImageView view, vk::ImageLayout layout, usize atOffset);
         void _writeUBO(vk::Buffer ubo, usize size, usize atOffset);
+        void _initBindless(u32 binding, u32 maxTextures);
 
     private:
         void* ptr(usize offset) { return static_cast<char*>(m_ptr) + offset; }
@@ -86,14 +108,22 @@ namespace Nova::GE {
         usize          m_offset     = 0;
         vk::Device     m_device;
         vk::detail::DispatchLoaderDynamic m_dld;
-
         vk::PhysicalDeviceDescriptorBufferPropertiesEXT m_descProps{};
-
         std::unordered_map<VkDescriptorSetLayout, std::vector<usize>> m_freeLists;
         usize m_capacity = 0;
         std::mutex m_mutex;
+        vk::DescriptorSetLayout m_bindlessLayout = VK_NULL_HANDLE;
         #ifndef NDEBUG
-        std::unordered_map<usize> m_liveOffsets;
+        std::unordered_set<usize> m_liveOffsets; // fixed from unordered_map
         #endif
+
+        // bindless texture array state
+        SetHandle m_bindlessSet{};
+        u32 m_bindlessBinding = 0;
+        u32 m_textureCapacity = 0;
+        std::vector<u32> m_freeTextureSlots;
+        std::mutex m_textureMutex;
+
+        NOVA_LOG_DEF("Descriptor");
     };
 }

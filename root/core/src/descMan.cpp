@@ -17,6 +17,27 @@ namespace Nova::Core {
 
 namespace Nova::GE {
 
+    void DescriptorMan::_initBindless(u32 binding, u32 maxTextures) {
+        vk::DescriptorSetLayoutBinding bind{};
+        bind.binding = binding;
+        bind.descriptorType = vk::DescriptorType::eSampledImage;
+        bind.descriptorCount = maxTextures;
+        bind.stageFlags = vk::ShaderStageFlagBits::eFragment;
+
+        vk::DescriptorSetLayoutCreateInfo layoutCI{};
+        layoutCI.setBindings(bind);
+        layoutCI.flags = vk::DescriptorSetLayoutCreateFlagBits::eDescriptorBufferEXT;
+
+        m_bindlessLayout = m_device.createDescriptorSetLayout(layoutCI, nullptr, m_dld);  // ← add m_dld, and while here, actually store it (see below)
+        // m_bindlessSet = allocateSet(m_bindlessLayout, 0);
+
+        m_bindlessBinding = binding;
+        m_textureCapacity = maxTextures;
+
+        m_freeTextureSlots.reserve(maxTextures);
+        for (u32 i = maxTextures; i-- > 0; ) m_freeTextureSlots.push_back(i);
+    }
+
     void DescriptorMan::init(VmaAllocator allocator, DevicePackage device, vk::PhysicalDeviceDescriptorBufferPropertiesEXT descProps, size_t size) {
         VkBufferCreateInfo bufCI{
             .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
@@ -41,9 +62,15 @@ namespace Nova::GE {
         m_dld            = device.dld;
         m_descProps      = descProps;
         m_offset         = 0;
+
+        _initBindless(6, 256);
     }
 
     void DescriptorMan::shutdown(VmaAllocator allocator) {
+        if (m_bindlessLayout) {
+            m_device.destroyDescriptorSetLayout(m_bindlessLayout);
+            m_bindlessLayout = VK_NULL_HANDLE;
+        }
         if (m_buffer != VK_NULL_HANDLE) {
             vmaDestroyBuffer(allocator, m_buffer, m_allocation);
             m_buffer     = VK_NULL_HANDLE;
