@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ============================================================================
+// [SIGN]: #modernizing
+// [DESC]: Converting from raw Vulkan handlers to the new ResourceFactory pattern.
+//         Still contains some temporary VkCreateInfo boilerplates.
+// ============================================================================
+
 #include "device.h"
 namespace Nova::GE {
-    namespace CreateInfo {
-        struct Factory {
-            Nova::GE::Device* m_device;
-        };
 
-        
-    };
 };
