@@ -5,6 +5,17 @@
 #include <vulkan/vulkan_core.h>
 #include <cassert>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Wrapper around vk::buffer
+// Info     : cover faults and move into modern spec.
+// ========================================
+
 namespace Nova::GE {
     namespace CreateInfo {
         struct Buffer {

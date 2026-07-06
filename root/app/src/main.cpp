@@ -6,6 +6,13 @@
 #include <SDL3/SDL_events.h>
 #include <vector>
 
+// ========================================
+/* Status: #legacy
+Description: This code shows an example of experimental features which may not be used in the future.
+Additional Info: None
+*/
+// ========================================
+
 int main() {
     #ifdef __linux__
     const char* desktop = getenv("XDG_CURRENT_DESKTOP");

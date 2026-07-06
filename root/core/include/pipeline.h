@@ -10,6 +10,17 @@
 #include <vulkan/vulkan.hpp>
 #include <vulkan/vulkan_core.h>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : Pipeline vulkan wrapper
+// Info     : is pretty much modern and okay, even includes are okay.
+// ========================================
+
 namespace Nova::GE {
 
     namespace CreateInfo {

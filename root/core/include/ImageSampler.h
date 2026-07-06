@@ -4,6 +4,18 @@
 #include "sampledImage.h"
 #include "vulkan/vulkan.hpp"
 #include <vulkan/vulkan_core.h>
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Texture sampler assigner
+// Info     : Needs to be moved elsewhere later
+// ========================================
+
 namespace Nova::GE {
 
     enum class SamplerPreset {

@@ -6,6 +6,17 @@
 #include <Nova/Core/core.h>
 #include <vk_mem_alloc.h>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : Instance wrapper
+// Info     : Enough but also needs later revision.
+// ========================================
+
 namespace Nova::GE {
     namespace CreateInfo {
         struct System {
@@ -35,7 +46,6 @@ namespace Nova::GE {
                         info->appName = name;
                         return *this;
                     }
-
                     Builder& setAppVersion(const uint32_t ver) {
                         info->appVersion = ver;
                         return *this;

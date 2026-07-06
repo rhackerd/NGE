@@ -19,6 +19,17 @@
 #include "device.h"
 #include "texture.h"
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Multithreaded and Singlethreaded manager and recorder of Command Buffers
+// Info     : By first look looks horrible, overall rewrite and rethink of this
+// ========================================
+
 namespace Nova::GE::Render {
 
     // -------------------------------------------------------------------------

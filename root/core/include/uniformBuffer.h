@@ -5,6 +5,18 @@
 #include "vulkan/vulkan.hpp"
 #include <vulkan/vulkan_core.h>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Uniform Buffer helper class 
+// Info     : None
+// ========================================
+
+
 namespace Nova::GE {
     namespace CreateInfo {
         struct UniformBuffer {

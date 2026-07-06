@@ -6,6 +6,17 @@
 #include <vulkan/vulkan_core.h>
 #include "core.h"
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : Low level wrapper around shaders
+// Info     : Again more than enough for NGE3.
+// ========================================
+
 namespace Nova::GE {
     namespace CreateInfo {
 

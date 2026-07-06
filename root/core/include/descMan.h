@@ -14,6 +14,17 @@
 #include <vulkan/vulkan_core.h>
 #include <unordered_set>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Manager of vulkan descriptors using bindless and descriptor buffer
+// Info     : Practically okay but still needs revision
+// ========================================
+
 namespace Nova::GE {
 
     struct SetHandle {

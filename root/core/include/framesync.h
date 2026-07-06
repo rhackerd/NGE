@@ -5,6 +5,17 @@
 #include "vulkan/vulkan.hpp"
 #include <vector>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Synchornization helper around vulkan sync2
+// Info     : Not even used, can be removed and still work.
+// ========================================
+
 namespace Nova::GE::Render {
 
     class FrameSync {

@@ -5,6 +5,18 @@
 #include "system.h"
 #include <Nova/Core/structs.hpp>
 #include <cglm/vec3.h>
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : A short high level wrapper for camera, is still kinda low level, but can be nicely used for low level and is used by High level wrapper
+// Info     : Properly fix the alignas
+// ========================================
+
 namespace Nova::GE {
 
     #if defined(__AVX__)

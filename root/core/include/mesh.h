@@ -11,6 +11,16 @@
 #include <assimp/postprocess.h>
 #include <vector>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : A mesh loader and wrapper
+// Info     : Also pretty much okay for NGE3, works and is kind of clean
+// ========================================
 
 namespace Nova::GE {
     // Too simple and high level for createInfo

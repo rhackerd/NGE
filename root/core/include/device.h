@@ -27,6 +27,17 @@
 #include "shader.h"
 #include <Nova/Core/macros.h>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Overall per device manger
+// Info     : This file only works, does not look good and is very bad, maybe full rewrite and a PR of itself.
+// ========================================
+
 namespace Nova::Core {
     [[noreturn]] inline void assertFail(const char* type, const char* msg, 
                                          std::source_location loc = std::source_location::current()) {

@@ -11,6 +11,10 @@
 #include "swapchain.h"
 #include "vulkan/vulkan.hpp"
 #include <vector>
+
+
+// TODO: make step only as a synchronization helper, CB managment shall be on the user.
+
 namespace Nova::Graphics {
 
     using Camera = GE::Camera;

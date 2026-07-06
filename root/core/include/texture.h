@@ -7,6 +7,18 @@
 #include <vulkan/vulkan_core.h>
 #include "stb_image.h"
 #include "vulkan/vulkan.hpp"
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : Better named `SampledImage` 
+// Info     : I don't think additional description is needed
+// ========================================
+
 namespace Nova::GE {
     // Too high level for createInfo
 
