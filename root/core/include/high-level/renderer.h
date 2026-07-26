@@ -9,7 +9,9 @@
 #include "high-level/object.h"
 #include "pipeline.h"
 #include "swapchain.h"
+#include "texture.h"
 #include "vulkan/vulkan.hpp"
+#include <functional>
 #include <vector>
 
 
@@ -67,6 +69,13 @@ namespace Nova::Graphics {
                 m_objects.push_back(object);
                 return object;
             }
+            [[nodiscard]]
+            weakRef<GE::Texture> createTexture(const std::string path) {
+                auto texture = GE::makeRef<GE::Texture>();
+                texture->init(path, *this->m_device, this->sampler.getSampler());
+                m_textures.push_back(texture);
+                return texture;
+            }
 
         private:
             Graphics& m_graphics;
@@ -89,6 +98,7 @@ namespace Nova::Graphics {
 
             std::vector<GE::ref<GE::Camera>> m_cameras;
             std::vector<GE::ref<Object>> m_objects;
+            std::vector<GE::ref<GE::Texture>> m_textures;
             Nova::GE::ImageSampler sampler;
 
     };

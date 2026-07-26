@@ -64,10 +64,10 @@ namespace Nova::GE {
             Nova::Core::Vec3       getUp()          const;
             SetHandle              getHandle()      const { return handle; }
 
-            void initDescriptor(DescriptorMan& man, SetHandle& handle) {
-                handle = man.allocateSet(handle.layout, handle.setIndex);
-                man.writeUBO(handle, handle.setIndex, m_buffer.getBuffer(), sizeof(CameraData));
-            }; 
+            void initDescriptor(DescriptorMan& man, SetHandle& setLayout) {
+                handle = man.allocateSet(setLayout.layout, setLayout.setIndex);
+                man.writeUBO(handle, 0, m_buffer.getBuffer(), sizeof(CameraData));
+            };
 
         private:
             void rebuildView();

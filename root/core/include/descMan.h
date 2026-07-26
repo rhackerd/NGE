@@ -65,6 +65,10 @@ namespace Nova::GE {
             return offset;
         }
 
+        SetHandle& getBindlessSet() {
+            return m_bindlessSet;
+        }
+
         u32 allocateTextureSlot() {
             std::lock_guard lock(m_textureMutex);
             if (m_freeTextureSlots.empty()) NERROR("bindless texture array exhausted");

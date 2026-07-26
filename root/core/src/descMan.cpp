@@ -29,7 +29,7 @@ namespace Nova::GE {
         layoutCI.flags = vk::DescriptorSetLayoutCreateFlagBits::eDescriptorBufferEXT;
 
         m_bindlessLayout = m_device.createDescriptorSetLayout(layoutCI, nullptr, m_dld);  // ← add m_dld, and while here, actually store it (see below)
-        // m_bindlessSet = allocateSet(m_bindlessLayout, 0);
+        m_bindlessSet = allocateSet(m_bindlessLayout, 0);
 
         m_bindlessBinding = binding;
         m_textureCapacity = maxTextures;
@@ -135,6 +135,8 @@ namespace Nova::GE {
         } else {
             usize size = getSetSize(setLayout);
             base = align(m_offset, m_descProps.descriptorBufferOffsetAlignment);
+            SDL_Log("allocateSet: layout=%p size=%zu base=%zu -> new m_offset=%zu",
+                    (void*)VkDescriptorSetLayout(setLayout), size, base, base + size);
             if (base + size > m_capacity) {
                 NOVA_PANIC(fmt::format("Descriptor buffer arena exhausted ({} / {} bytes)", base + size, m_capacity).c_str());
             }

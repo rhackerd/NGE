@@ -1,5 +1,6 @@
 #pragma once
 
+#include "descMan.h"
 #include "sampledImage.h"
 #include <Nova/Core/log.h>
 #include <Nova/Core/macros.h>
@@ -15,8 +16,8 @@
 // State    : #modern@nge3
 // Origin   : @nge2
 //
-// Desc     : Better named `SampledImage` 
-// Info     : I don't think additional description is needed
+// Desc     : Wrapper around SampledImage with TexSlot being stored (bindless)
+// Info     : Stores ID of the texture in the bindless buffer
 // ========================================
 
 namespace Nova::GE {
@@ -25,9 +26,16 @@ namespace Nova::GE {
     class Texture : public SampledImage {
         public:
             Texture() {};
-            ~Texture() {};
+            ~Texture() {shutdown();};
 
         public:
             bool init(const std::string path, Device& device, vk::Sampler sampler);
+            void shutdown();
+
+            u32 getSlot() const { return m_slot; }
+
+        private:
+            u32 m_slot = 0;
+            DescriptorMan* m_c_dman;
     };
 };

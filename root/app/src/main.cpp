@@ -50,12 +50,15 @@ int main() {
     // Renderer
     Nova::Graphics::Renderer renderer(gfx);
 
+
+    // Try texture
+    // auto texture = renderer.createTexture("aircraft.png");
+
     // Setup scene
     auto camera = renderer.createCamera();
     auto _object = renderer.createObject();
     auto object = _object.lock();
     object->loadMesh("aircraft.obj");
-    object->loadTexture("aircraft.png");
 
     camera.lock()->setPosition({0,20,-5.0f});
     camera.lock()->setPerspective(60.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
