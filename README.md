@@ -8,15 +8,15 @@ This is a low level wrapper around Vulkan, as well as a high level library aroun
 ## Key Features
 * **Lightweight:** The project should be clear and lightweight, so no raytracing nor pathtracing this should be raw rasterization renderer, thus being lightweight. More [here](#lightweight)
 * **Create Info's:** `Builder`'s and CreateInfo are used for the creation of resources which can be edited raw as a struct by also has a Builder which uses normal functions to construct the struct. More [here](#createinfos)
-* **Pipeline Layout:** Without the use of traditional JSON files to define the pipeline layout I want to use straight out C++, so I built a clean bake system for pipeline layouts. More [here](#pipeline-creation)
+* **Pipeline Layout:** Without the use of traditional JSON files to define the pipeline layout. I want to use straight out C++, so I built a clean bake system for pipeline layouts. More [here](#pipeline-creation)
 
 ## Who is this library for ?
 ### Yes
-* **Game Developers:** game developers can use this library as raylib, almost no dependency (except for VMA) but modern and no OpenGL
+* **Game Developers:** game developers can use this library as raylib.
 * **Inspiration:** This project can be used for inspiration and to learn vulkan.
-* **Engine Development:** This project is not a direct competitor to big libraries like bgfx or wgpu, yet, but because it is lightweight can be used for indie engines.
+* **Engine Development:** This project is not a direct competitor to big libraries like bgfx or wgpu, yet, but because it is lightweight it can be used for indie engines.
 ### No
-* **AAA grade engines:** This project is not AAA grade and probably will not be in the future, it shall be only indie graphics engine which can be used for people to for example prototypes systems for their games.
+* **AAA grade engines:** This project is not AAA grade and probably will not be in the future, it shall be only an indie graphics engine which can be used for people to for example prototype systems for their games.
 
 ## Examples
 ### CreateInfo's
@@ -69,7 +69,7 @@ m_pipelineLayout = m_pipeline.lock()->getLayout();
 
 ### Rendering
 > [!IMPORTANT]
-> Synchronization isn't implemented yet, thus needs to be managed manually. Example can be shown in the same function as this code how to manage that.
+> Synchronization isn't implemented yet, thus needs to be managed manually. Example can be shown in the same function as this code.
 
 > [!NOTE]
 > Commented code from original file is removed for readability.
@@ -99,8 +99,8 @@ m_lastSlot = m_cpuf.batchSubmit(m_renderTarget,
 
 *Code from [renderer.cpp](./root/core/src/renderer.cpp)*
 
-#### Description
-the last bracket (which should be a std::function) will get executed after the first function is executed. But can be left empty if not needed.
+>> [!Note] Description
+>> the last bracket (which should be a std::function) will get executed after the first function is executed. But can be left empty if not needed.
 
 
 ### Swapchain recreation
@@ -129,16 +129,16 @@ while (running) {
 *Code from [main.cpp](./root/app/src/main.cpp)*
 
 ## Roadmap
-* **Multi-threading:** Command buffer recording can be multi threaded, but creation of objects isn't possible at the time while multi thread, because of thread-safety
-* **Remove AI trash:** This old project was using AI, but my view of AI has changed, thus I will remove any parts of code written by AI. In the future only examples pieces of code will be written by AI only for testing or placeholders an will be in a branch on itself.
-* **Modernizing legacy code:** This project was formerly me learning vulkan but turned out cleaner than I though, and by the legacy name is the second iteration so I knew a lot about vulkan. More details in [Tags](./FileFlags.md)
+* **Multi-threading:** Command buffer recording can be multi threaded. At the time being creation of objects while rendering is not possible, is is planned though.
+* **Remove AI trash:** This project was using AI. My view of AI has changed, thus I will remove any parts of code written by AI. In the future i won't use AI at all.
+* **Modernizing legacy code:** This project was formerly me learning vulkan, but turned out cleaner than I thought. Right now im in the process of modernizing this project, More details in [Tags](./FileFlags.md)
 
 
 
 ## Lightweight
-To try to explain by what I mean by this, I don't mean as other project to attract more people this is actually a lightweight library like vulkan, everyone can use it but it's not AAA grade graphics engine. for example it lacks these things:
+The goal of this project is to be a lightweight wrapper around vulkan, for example it lacks these things:
 - no ECS
 - no scene Graph
 - no editor
 - no physics
-- no asset pipeline
+- no assets pipeline
