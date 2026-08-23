@@ -5,6 +5,18 @@
 #include "system.h"
 #include <Nova/Core/structs.hpp>
 #include <cglm/vec3.h>
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : A short high level wrapper for camera, is still kinda low level, but can be nicely used for low level and is used by High level wrapper
+// Info     : Properly fix the alignas
+// ========================================
+
 namespace Nova::GE {
 
     #if defined(__AVX__)
@@ -52,10 +64,10 @@ namespace Nova::GE {
             Nova::Core::Vec3       getUp()          const;
             SetHandle              getHandle()      const { return handle; }
 
-            void initDescriptor(DescriptorMan& man, SetHandle& handle) {
-                handle = man.allocateSet(handle.layout, handle.setIndex);
-                man.writeUBO(handle, handle.setIndex, m_buffer.getBuffer(), sizeof(CameraData));
-            }; 
+            void initDescriptor(DescriptorMan& man, SetHandle& setLayout) {
+                handle = man.allocateSet(setLayout.layout, setLayout.setIndex);
+                man.writeUBO(handle, 0, m_buffer.getBuffer(), sizeof(CameraData));
+            };
 
         private:
             void rebuildView();

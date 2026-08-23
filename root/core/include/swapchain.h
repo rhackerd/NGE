@@ -21,6 +21,17 @@
 #include "device.h"
 #include <Nova/Core/structs.hpp>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Swapchain implementation with MSAA support.
+// Info     : Is a mess in includes and needs to be moved to be per window and not per device.
+// ========================================
+
 namespace Nova::GE {
 
 

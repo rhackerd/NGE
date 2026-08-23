@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 #include "system.h"
 #include "vulkan/vulkan.hpp"
 #include <Nova/Core/base.h>
@@ -21,6 +22,18 @@
 #include <Nova/Core/structs.hpp>
 
 #include <Nova/Core/macros.h>
+
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : Image wrapper and ImageView handler
+// Info     : NPretty much modern, only needs a revision and remove some includes.
+// ========================================
 
 namespace Nova::GE {
 

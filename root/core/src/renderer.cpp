@@ -98,6 +98,7 @@ namespace Nova::Graphics {
                 cmd.setSwapchain(*m_swapchain);
                 cmd.bindDescriptorBuffer();
                 cmd.bindPipeline(m_pipeline.lock());
+                // cmd.bindSet(m_device->getDescriptorManager().getBindlessSet());
                 // cmd.bindSet(0, camera.getHandle(), pipeline.lock()->getLayout());
                 // cmd.bindSet(1, tex.lock()->getHandle(), pipeline.lock()->getLayout());
                 // cmd.pushConstant(objectPos, pipeline.lock()->getLayout());
@@ -106,6 +107,7 @@ namespace Nova::Graphics {
                 // cmd.bindSet(0, camera->getHandle(), m_pipelineLayout);
                 cmd.bindSet(camera->getHandle());
                 // cmd.bindSet(0, camera->getHandle(), m_pipelineLayout);
+                // cmd.bindSet(m_device->getDescriptorManager().getBindlessSet());
                 for (auto& objRef : scene.objects) {
                     auto obj = objRef.lock();
                     

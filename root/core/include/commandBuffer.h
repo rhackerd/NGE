@@ -6,6 +6,17 @@
 #include <Nova/Core/macros.h>
 #include <memory>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : #legacy@nge3
+//
+// Desc     : Wrapper around commandBuffer
+// Info     : in first look looks okay but i will still rewrite some things
+// ========================================
+
 namespace Nova::GE {
     namespace CreateInfo {
         struct CommandBuffer {

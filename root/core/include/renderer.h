@@ -36,3 +36,15 @@
 // GPUF will return a FrameResource to Presenter
 // FrameResource can be used for VR, Window - just anything that can present or want to show the frame
 // Done
+
+
+// TODO: Move to an .md file
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Renderer overview
+// Info     : Needs to be moved into an .md file later because this does not implement anything
+// ========================================

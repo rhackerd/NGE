@@ -12,13 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ============================================================================
-// [SIGN]: #modernizing
-// [DESC]: Converting from raw Vulkan handlers to the new ResourceFactory pattern.
-//         Still contains some temporary VkCreateInfo boilerplates.
-// ============================================================================
+// TODO: Continue development
+// ========================================
+// Metadata
+//
+// State    : #managed@nge3
+// Origin   : @nge3
+//
+// Desc     : A factory class which splits legacy Device resource creation into it's own factory
+// Info     : Should be Per-Device
+// ========================================
 
 #include "device.h"
 namespace Nova::GE {
-
+    
 };

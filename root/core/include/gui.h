@@ -7,6 +7,17 @@
 #include "backends/imgui_impl_vulkan.h"
 #include <vulkan/vulkan.hpp>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : ImGui implementation
+// Info     : Not even used but will try to rewrite it a little and use for the help of rewrite
+// ========================================
+
 namespace Nova::GE::Render {
 
     class ImGuiContext {

@@ -4,6 +4,18 @@
 #include "core.h"
 #include "types.h"
 #include "vulkan/vulkan.hpp"
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #managed@nge3
+// Origin   : @nge2
+//
+// Desc     : GBuffer implementation.
+// Info     : For now a side-quest kind of will be later rewritten in NGE3
+// ========================================
+
 namespace Nova::GE {
     enum class GBufferAttachmentFlags : u32 {
         None     = 0,

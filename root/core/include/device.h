@@ -27,6 +27,17 @@
 #include "shader.h"
 #include <Nova/Core/macros.h>
 
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Overall per device manger
+// Info     : This file only works, does not look good and is very bad, maybe full rewrite and a PR of itself.
+// ========================================
+
 namespace Nova::Core {
     [[noreturn]] inline void assertFail(const char* type, const char* msg, 
                                          std::source_location loc = std::source_location::current()) {
@@ -175,12 +186,14 @@ namespace Nova::GE {
         }
     }
 
+    // TODO: God .h file, move to elsewhere later
     struct UploadHandle {
         vk::CommandBuffer cmd;
         vk::Fence fence;
         Buffer buffer;
     };
 
+    // TODO: Update metadata
     /**
      * @class GfxEngine
      * @brief Main class for NGE Graphics Engine
@@ -234,6 +247,7 @@ namespace Nova::GE {
                 return buffer;
             }
 
+            // TODO: also probably move to somewhere else for example Image could be candidate
             void uploadToImage(ref<Image>, void* pixels);
             // void signTexture(weakRef<Texture> texture, vk::DescriptorSetLayout setLayout, Camera& camera) {
             //     auto tex = texture.lock();
@@ -279,10 +293,12 @@ namespace Nova::GE {
             usize getSampledImageSize() { return imageDescSize; }
             DescriptorMan& getDescriptorManager() { return descriptorManager; }
         private:
+            // TODO: Should be init phases, can be mistaken for actual functions.
             void setupQueues();
             void FillFamilyIndices(std::optional<vk::SurfaceKHR> surface);
             std::vector<vk::DeviceQueueCreateInfo> getQueueCreateInfos();
 
+            // TODO: 
             void printGPUInfo(std::vector<const char*>);
 
         private:
@@ -300,14 +316,17 @@ namespace Nova::GE {
 
             vk::detail::DispatchLoaderDynamic dld;
 
+            // TODO: As noted before move this somewhere else (factory.h)
             std::vector<ref<Image>> images;
             std::vector<ref<CommandBuffer>> commandBuffers;
             std::vector<ref<Shader>> shaders;
             std::vector<ref<Pipeline>> pipelines;
             std::vector<ref<UniformBuffer>> ubos;
 
+            // TODO: Remove global CmdPool, should be managed by CPUF.h
             vk::CommandPool commandPool = VK_NULL_HANDLE;
 
+            // TODO: Duplicate Logger
             NOVA_LOG_DEF("Device");
             std::unique_ptr<Nova::Core::Logger> log;
 
@@ -321,9 +340,11 @@ namespace Nova::GE {
 
             float m_queuePriority = 1.0f;
 
+            // TODO: as well should be moved to CPUF.h
             ref<CommandBuffer> transferBuffer;
             bool transferBufferReady = false;
     };
+    // TODO: move to core.h for example, bloats this file
     namespace CI = CreateInfo;
     
 };

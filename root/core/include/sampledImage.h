@@ -6,6 +6,18 @@
 #include "descMan.h"
 #include "device.h"
 #include "vulkan/vulkan.hpp"
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : Image but sampled
+// Info     : Good idea but needs later rethink and review if can work with bindless and descriptor buffer
+// ========================================
+
 namespace Nova::GE {
 
     // void uploadImage(Image&, void* pixels, vk::DeviceSize size, vk::CommandBuffer cmd, vk::Queue queue, VmaAllocator allocator);

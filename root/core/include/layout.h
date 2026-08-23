@@ -6,6 +6,18 @@
 #include "vulkan/vulkan.hpp"
 #include <Nova/Core/base.h>
 #include <vector>
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #modern@nge3
+// Origin   : @nge2
+//
+// Desc     : Vulkan pipeline layout and shader layout wrapper
+// Info     : Pretty clean on itself enough for NGE3
+// ========================================
+
 namespace Nova::GE {
     struct UniformBufferEntry {
         u32 binding;

@@ -6,6 +6,8 @@ ConstantBuffer<CameraUBO> cam;
 [[vk::push_constant]]
 Transform transform;
 
+
+
 float3x3 inverseMat3(float3x3 m) {
     float det = m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2])
               - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])

@@ -9,6 +9,10 @@ public struct Transform {
     public float4x4 model;
 };
 
+public struct TextureID {
+    public uint32_t textureID; 
+};
+
 public struct VertexInput {
     public float3 position : POSITION;
     public float3 normal   : NORMAL;

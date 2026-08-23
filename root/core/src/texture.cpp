@@ -27,6 +27,21 @@ namespace Nova::GE {
 
         device.uploadToImage(getImage().lock(), pixels);
         stbi_image_free(pixels);
+
+        auto& descMan = device.getDescriptorManager();
+
+        const u32 slot = descMan.allocateTextureSlot();
+
+
+        descMan.writeTextureSlot(slot, getImageView(), vk::ImageLayout::eReadOnlyOptimal);
+    
+        m_c_dman =  &descMan;
+            
         return true;
+    }
+
+    void Texture::shutdown() {
+        m_c_dman->freeTextureSlot(m_slot);
+        m_slot = 0;
     }
 };

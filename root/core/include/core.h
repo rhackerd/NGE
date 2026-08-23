@@ -9,6 +9,18 @@
 #include <vulkan/vulkan.h>
 #include <cstdint>
 #include <fstream>
+
+// TODO: modernize
+// ========================================
+// Metadata
+//
+// State    : #legacy@nge3
+// Origin   : @nge2
+//
+// Desc     : A file that should be implemented by all files
+// Info     : Split functionality, for example move version managment to version.h, and some things are already in NovaCore
+// ========================================
+
 namespace Nova::GE {
     struct Version {
         uint32_t major;
