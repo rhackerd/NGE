@@ -23,3 +23,7 @@ target("app")
     add_files("root/app/src/*.cpp")
 
     add_deps("NGE")
+
+    after_build(function (target)
+        os.cp("$(projectdir)/assets", target:targetdir())
+    end)

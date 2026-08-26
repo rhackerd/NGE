@@ -8,8 +8,8 @@ namespace Nova::Graphics {
         // pipeline
         m_device = &graphics.getDevice();
 
-        auto vertex = m_device->createShader("shaders/vert.spv", vk::ShaderStageFlagBits::eVertex);
-        auto frag   = m_device->createShader("shaders/frag.spv", vk::ShaderStageFlagBits::eFragment);
+        auto vertex = m_device->createShader("assets/shaders/vert.spv", vk::ShaderStageFlagBits::eVertex);
+        auto frag   = m_device->createShader("assets/shaders/frag.spv", vk::ShaderStageFlagBits::eFragment);
 
         // First layout
         Nova::GE::ShaderSet cameraSet;

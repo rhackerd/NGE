@@ -26,3 +26,4 @@ CMakeFiles
 bin
 .cache
 compile_commands.json
+imgui.ini

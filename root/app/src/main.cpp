@@ -57,7 +57,9 @@ int main() {
     auto camera = renderer.createCamera();
     auto _object = renderer.createObject();
     auto object = _object.lock();
-    object->loadMesh("aircraft.obj");
+    object->loadMesh("assets/models/aircraft.obj");
+
+    object->loadTexture("assets/textures/aircraft.png");
 
     camera.lock()->setPerspective(60.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     camera.lock()->setAspect(800.0f / 600.0f);
