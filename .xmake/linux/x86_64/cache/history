@@ -1,6 +1,5 @@
 {
     cmdlines = {
-        "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/config.lua",
         "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/update_intellisense.lua .vscode clangd",
         "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/explorer.lua",
         "xmake check",
@@ -63,6 +62,7 @@
         "xmake check",
         "xmake run",
         "xmake ",
+        "xmake run",
         "xmake run",
         "xmake run"
     }
