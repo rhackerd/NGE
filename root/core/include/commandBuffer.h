@@ -2,8 +2,6 @@
 
 #include "types.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/base.h>
-#include <Nova/Core/macros.h>
 #include <memory>
 
 // TODO: modernize
@@ -28,14 +26,23 @@ namespace Nova::GE {
 
             class Builder;
         };
-        class CommandBuffer::Builder : public Nova::Core::Base::Builder<CommandBuffer> {
-        public:
-            Builder() { get().CommandBufferCount = 1; }
-            Builder& setCommandBufferCount(u32 count) { get().CommandBufferCount = count; return *this; }
-            Builder& setSecondary(bool secondary) { get().secondary = secondary; return *this; }
-            Builder& setPrimary() { get().secondary = false; return *this; }
-            Builder& setManual(bool manual) { get().manual = manual; return *this; }
-            CommandBuffer build() { return std::move(get()); }
+        class CommandBuffer::Builder {
+            private: CommandBuffer* info;
+            public:
+                Builder() {
+                    info = new CommandBuffer();
+                    info->CommandBufferCount = 1;
+                }
+                Builder& setCommandBufferCount(u32 count) { info->CommandBufferCount = count; return *this; }
+                Builder& setSecondary(bool secondary) { info->secondary = secondary; return *this; }
+                Builder& setPrimary() { info->secondary = false; return *this; }
+                Builder& setManual(bool manual) { info->manual = manual; return *this; }
+                CommandBuffer build() {
+                    CommandBuffer result = *info;
+                    delete info;
+                    info = nullptr;
+                    return result;
+                }
         };
     }
 
@@ -51,7 +58,7 @@ namespace Nova::GE {
         void shutdown();
         vk::CommandBuffer getCommandBuffer() { return commandBuffer; }
         bool isSecondary() { return secondary; }
-        NINTERNAL void set(vk::CommandBuffer commandBuffer) { this->commandBuffer = commandBuffer; }
+        void set(vk::CommandBuffer commandBuffer) { this->commandBuffer = commandBuffer; }
     private:
         vk::CommandBuffer commandBuffer;
         vk::Device device;

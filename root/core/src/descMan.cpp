@@ -1,19 +1,6 @@
 #include "descMan.h"
-#include "system.h"
-#include "vulkan/vulkan.hpp"
-#include <Nova/Core/macros.h>
-#include <vulkan/vulkan_core.h>
 
-#include <source_location>
-
-namespace Nova::Core {
-    [[noreturn]] inline void assertFail(const char* type, const char* msg, 
-                                         std::source_location loc = std::source_location::current()) {
-        // use your existing logger or just stderr
-        fprintf(stderr, "[%s] %s — %s:%d\n", type, msg, loc.file_name(), loc.line());
-        std::abort();
-    }
-}
+#include <fmt/format.h>
 
 namespace Nova::GE {
 
@@ -138,7 +125,7 @@ namespace Nova::GE {
             SDL_Log("allocateSet: layout=%p size=%zu base=%zu -> new m_offset=%zu",
                     (void*)VkDescriptorSetLayout(setLayout), size, base, base + size);
             if (base + size > m_capacity) {
-                NOVA_PANIC(fmt::format("Descriptor buffer arena exhausted ({} / {} bytes)", base + size, m_capacity).c_str());
+                printf("%s", fmt::format("Descriptor buffer arena exhausted ({} / {} bytes)", base + size, m_capacity).c_str());
             }
             m_offset = base + size;
         }
@@ -155,7 +142,7 @@ namespace Nova::GE {
 
         #ifndef NDEBUG
         auto it = m_liveOffsets.find(set.baseOffset);
-        NOVA_ASSERT(it != m_liveOffsets.end(), "freeSet called on an offset that isn't currently allocated (double-free?)");
+        // NOVA_ASSERT(it != m_liveOffsets.end(), "freeSet called on an offset that isn't currently allocated (double-free?)");
         m_liveOffsets.erase(it);
         #endif
 

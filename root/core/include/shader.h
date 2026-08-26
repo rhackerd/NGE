@@ -1,7 +1,6 @@
 #pragma once
 
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/base.h>
 #include <string>
 #include <vulkan/vulkan_core.h>
 #include "core.h"
@@ -27,12 +26,13 @@ namespace Nova::GE {
             class Builder;
         };
 
-        class Shader::Builder : public Nova::Core::Base::Builder<Shader> {
+        class Shader::Builder {
+            private: Shader* info;
             public:
                 Builder& loadFromPath(const std::string& path) {
                     auto code = readFile(path);
-                    get().moduleCI.codeSize = code.size();
-                    get().moduleCI.pCode = reinterpret_cast<const uint32_t*>(code.data());
+                    info->moduleCI.codeSize = code.size();
+                    info->moduleCI.pCode = reinterpret_cast<const uint32_t*>(code.data());
                     return *this;
                 };
         };

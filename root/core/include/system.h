@@ -3,7 +3,6 @@
 #include <optional>
 #include <vector>
 #include <vulkan/vulkan.hpp>
-#include <Nova/Core/core.h>
 #include <vk_mem_alloc.h>
 
 // TODO: modernize
@@ -32,9 +31,7 @@ namespace Nova::GE {
             bool validation = true;
 
             class Builder {
-                private:
-                    System* info;
-
+                private: System* info;
                 public:
                     Builder() : info(new System()) {}
 
@@ -158,7 +155,6 @@ namespace Nova::GE {
             vk::Instance instance;
             VmaAllocator allocator;
             vk::detail::DispatchLoaderDynamic dld;
-            NOVA_LOG_DEF("System");
     };
 
     

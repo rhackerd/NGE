@@ -1,4 +1,6 @@
 #include "buffer.h"
+#include "vulkan/vulkan.hpp"
+#include <vulkan/vulkan_core.h>
 
 namespace Nova::GE {
     void Buffer::init(CreateInfo::Buffer& createInfo) {
@@ -15,7 +17,10 @@ namespace Nova::GE {
         cAllocInfo.flags    = VMA_ALLOCATION_CREATE_MAPPED_BIT;
 
         VkBuffer buffer;
-        vmaCreateBuffer(m_allocator, &bufferInfo, &cAllocInfo, &buffer, &m_alloc, &m_allocInfo);
+        if (vmaCreateBuffer(m_allocator, &bufferInfo, &cAllocInfo, &buffer, &m_alloc, &m_allocInfo) != VK_SUCCESS) {
+            printf("Buffer init(): vmaCreateBuffer failed\n");
+            return;
+        }
         m_buffer = buffer;
     }
     void Buffer::shutdown() {

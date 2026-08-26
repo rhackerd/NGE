@@ -1,22 +1,5 @@
 #include "device.h"
-#include "Image.h"
-#include "commandBuffer.h"
-#include "core.h"
-#include "descMan.h"
-#include "shader.h"
-#include "system.h"
-#include "uniformBuffer.h"
-#include "vulkan/vulkan.hpp"
-#include <Nova/Core/core.h>
-#include <Nova/Core/macros.h>
-#include <cmath>
-#include <memory>
-#include <Nova/Desktop/core.h>
-#include <optional>
-#include <vector>
-#include <vulkan/vulkan_core.h>
-#include <vulkan/vulkan_hpp_macros.hpp>
-#include <Nova/Core/log.h>
+#include <cglm/vec2.h>
 #include <vulkan/vulkan_to_string.hpp>
 
 namespace Nova::GE {
@@ -24,16 +7,16 @@ namespace Nova::GE {
     uint16_t GPUIndex = 0;
     bool Device::init(CreateInfo::Device& createInfo) {
         if (!createInfo.mPhysicalDevice) {
-            NINFO("Invalid physical device!");
+            printf("device init(): invalid physical device\n");
             return false;
         }
 
         mPhysicalDevice = createInfo.mPhysicalDevice;
         system = createInfo.system;
 
-        log = std::make_unique<Nova::Core::Logger>(fmt::format("GPU #{}", GPUIndex));
+        this->devId = GPUIndex;
         printGPUInfo(createInfo.extensions);
-        NOVA_INFO(*log, "Initiating Device");
+        printf("device(%i) init(): initiating device\n", devId);
 
         // ── Features chain ────────────────────────────────────────────
         vk::PhysicalDeviceDynamicRenderingFeatures dynamicRendering{};
@@ -55,9 +38,11 @@ namespace Nova::GE {
         deviceFeatures.setPNext(&descBuffer); // head of chain
 
         // ── Queues ────────────────────────────────────────────────────
-        NOVA_INFO(*log, "Preparing for device creation");
+        // NOVA_INFO(*log, "Preparing for device creation");
+        printf("device(%i) init(): preparing for device creation\n", devId);
         FillFamilyIndices(createInfo.surface);
-        NOVA_INFO(*log, "Filled Family Indices");
+        // NOVA_INFO(*log, "Filled Family Indices");
+        printf("device(%i) init(): filled family indices\n", devId);
 
         // ── Device ───────────────────────────────────────────────────
         auto queueInfos = getQueueCreateInfos();
@@ -68,13 +53,16 @@ namespace Nova::GE {
             .setPNext(&deviceFeatures)
             .setPEnabledExtensionNames(createInfo.extensions);
 
-        NOVA_INFO(*log, "Making device create info");
+        // NOVA_INFO(*log, "Making device create info");
+        printf("device(%i) init(): making device create info\n", devId);
         mLogicalDevice = mPhysicalDevice.createDevice(dcreateInfo, nullptr, system->getDld());
         if (!mLogicalDevice) {
-            NOVA_INFO(*log, "Failed to create device");
+            // NOVA_INFO(*log, "Failed to create device");
+            printf("device(%i) init(): failed to create device\n", devId);
             return false;
         }
-        NOVA_INFO(*log, "Created device");
+        // NOVA_INFO(*log, "Created device");
+        printf("device(%i) init(): device created\n", devId);
 
         dld.init(system->getInstance(), vkGetInstanceProcAddr);
         dld.init(mLogicalDevice);
@@ -90,20 +78,24 @@ namespace Nova::GE {
         allocCI.flags           |= VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
 
         if (vmaCreateAllocator(&allocCI, &mAllocator) != VK_SUCCESS) {
-            NOVA_INFO(*log, "Failed to create allocator");
+            // NOVA_INFO(*log, "Failed to create allocator");
+            printf("device(%i) init(): failed to create allocator\n", devId);
             return false;
         }
 
         // ── Command pool ──────────────────────────────────────────────
-        NOVA_INFO(*log, "Making command pool.");
+        //NOVA_INFO(*log, "Making command pool.");
+        printf("device(%i) init(): making command pool\n", devId);
         vk::CommandPoolCreateInfo poolCI{};
         poolCI.setQueueFamilyIndex(indices.graphicsFamily.value())
             .setFlags(vk::CommandPoolCreateFlagBits::eResetCommandBuffer); // ← fix
         commandPool = mLogicalDevice.createCommandPool(poolCI);
-        NOVA_INFO(*log, "Created command pool.");
+        // NOVA_INFO(*log, "Created command pool.");
+        printf("device(%i) init(): crated command pool\n", devId);
 
         // ── Descriptor sizing ─────────────────────────────────────────
-        NOVA_INFO(*log, "Querying compatibility");
+        // NOVA_INFO(*log, "Querying compatibility");
+        printf("device(%i) init(): querying compatibility\n", devId);
         vk::PhysicalDeviceDescriptorBufferPropertiesEXT descProps{};
         vk::PhysicalDeviceProperties2 props2{};
         props2.pNext = &descProps;
@@ -113,19 +105,23 @@ namespace Nova::GE {
         samplerDescSize = descProps.samplerDescriptorSize;
         ssboDescSize   = descProps.storageBufferDescriptorSize;
         imageDescSize = descProps.sampledImageDescriptorSize;
-        NOVA_INFO(*log, "Done querying compatibility");
+        // NOVA_INFO(*log, "Done querying compatibility");
+        printf("device(%i) init(): done querying compatibility\n", devId);
 
         // ── Descriptor manager ────────────────────────────────────────
-        NOVA_INFO(*log, "Making descriptor manager");
+        // NOVA_INFO(*log, "Making descriptor manager");
+        printf("device(%i) init(): making descriptor manager\n", devId);
         descriptorManager.init(mAllocator, {mLogicalDevice, getDld()}, descProps);
-        NOVA_INFO(*log, "Created descriptor manager");
+        // NOVA_INFO(*log, "Created descriptor manager");
+        printf("device(%i) init(): created descriptor manager\n", devId);
 
         return true;
     }
 
     void Device::shutdown() {
         if (!mLogicalDevice) return;
-        NOVA_INFO(*log, "Shutting down Device");
+        // NOVA_INFO(*log, "Shutting down Device");
+        printf("device(%i) shutdown(): shutting down device\n", devId);
 
         for (auto& image : images) {
             image->shutdown();
@@ -170,7 +166,8 @@ namespace Nova::GE {
 
         mLogicalDevice.destroy();
         mLogicalDevice = nullptr;
-        NOVA_INFO(*log, "Shut down Device");
+        // NOVA_INFO(*log, "Shut down Device");
+        printf("device(%i) shutdown(): device destroyed\n", devId);
     }
 
 
@@ -184,17 +181,17 @@ namespace Nova::GE {
         auto image = std::make_shared<Image>();  // Create shared_ptr directly
         
         if (!image->init(createInfo)) {
-            NOVA_INFO(*log, "Failed to create image");
+        printf("device(%i) createImage(): Failed to create image\n", devId);
             return nullptr;
         }
         
-        NOVA_INFO(*log, "Created image");
+        printf("device(%i) createImage(): Created image\n", devId);
         images.push_back(image);  // Store the shared_ptr
         return image;
     }
 
     void Device::removeImage(ImagePtr image) {
-        NOVA_INFO(*log, "Removing image");
+    printf("device(%i) removeImage(): Removing image\n", devId);
         image->shutdown();
         images.erase(std::remove(images.begin(), images.end(), image), images.end());
     }
@@ -211,9 +208,9 @@ namespace Nova::GE {
 
         auto allocated = mLogicalDevice.allocateCommandBuffers(allocInfo);
 
-        NOVA_INFO(*log, "Allocating {} {} command buffers", 
-            createInfo.CommandBufferCount, 
-            createInfo.secondary ? "secondary" : "primary");
+        // NOVA_INFO(*log, "Allocating {} {} command buffers", 
+        //    createInfo.CommandBufferCount, 
+        //     createInfo.secondary ? "secondary" : "primary");
 
         std::vector<ref<CommandBuffer>> result;
         result.reserve(createInfo.CommandBufferCount);
@@ -221,7 +218,7 @@ namespace Nova::GE {
         for (auto& cb : allocated) {
             auto commandBuffer = std::make_shared<CommandBuffer>();
             if (!commandBuffer->init(createInfo)) {
-                NOVA_INFO(*log, "Failed to init command buffer");
+            printf("device(%i) createCommandBuffers(): Failed to init command buffer\n", devId);
                 return {};  // empty vector on failure
             }
             commandBuffer->set(cb);
@@ -229,24 +226,25 @@ namespace Nova::GE {
             result.push_back(commandBuffer);
         }
 
-        NOVA_INFO(*log, "Done allocating command buffers");
+        printf("device(%i) createCommandBuffers(): Done allocating command buffers\n", devId);
         return result;
     }
 
     weakRef<Shader> Device::createShader(const std::string& path, vk::ShaderStageFlagBits stage) {
-        NOVA_INFO(*log, "Making {} shader from {}", vk::to_string(stage), path);
+        // NOVA_INFO(*log, "Making {} shader from {}", vk::to_string(stage), path);
+        printf("device(%i) createShader(): making %s shader from %s\n",devId, vk::to_string(stage).c_str(), path.c_str());
         auto shader = makeRef<Shader>(path, stage, &mLogicalDevice);
 
-        NOVA_INFO(*log, "Created {} shader from {}", vk::to_string(stage), path);
-
+        // NOVA_INFO(*log, "Created {} shader from {}", vk::to_string(stage), path);
+        printf("device(%i) createShader(): done\n");
         shaders.push_back(shader);
         return shader;
     }
 
     weakRef<Pipeline> Device::createPipeline(CreateInfo::Pipeline& createInfo) {
-        NOVA_INFO(*log, "Making pipeline");
+        printf("device(%i) createPipeline(): Making pipeline\n", devId);
         auto pipeline = makeRef<Pipeline>(mLogicalDevice, getDld(), createInfo);
-        NOVA_INFO(*log, "Made a pipeline");
+        printf("device(%i) createPipeline(): Made a pipeline \n", devId);
         pipelines.push_back(pipeline);
         return pipeline;
     }
@@ -275,7 +273,9 @@ namespace Nova::GE {
     // }
 
     void Device::uploadToImage(ref<Image> image, void* pixels) {
-        vk::DeviceSize size = image->getExtent().x() * image->getExtent().y() * getFormatSize(image->getFormat());
+        vec2 out;
+        image->getExtent(out);
+        vk::DeviceSize size = out[0] * out[1] * getFormatSize(image->getFormat());
 
         auto stagingCI = CreateInfo::Buffer::Builder()
             .setSize(size)
@@ -314,13 +314,15 @@ namespace Nova::GE {
         cmd.pipelineBarrier2(vk::DependencyInfo{}.setImageMemoryBarriers(toTransfer));
 
         // Copy
+        image->getExtent(out);
+
         vk::BufferImageCopy region{};
         region.imageSubresource
             .setAspectMask(vk::ImageAspectFlagBits::eColor)
             .setMipLevel(0).setBaseArrayLayer(0).setLayerCount(1);
         region
             .setImageOffset({0,0,0})
-            .setImageExtent({static_cast<uint32_t>(image->getExtent().x()), static_cast<uint32_t>(image->getExtent().y()), 1});
+            .setImageExtent({static_cast<uint32_t>(out[0]), static_cast<uint32_t>(out[1]), 1});
 
         cmd.copyBufferToImage(staging.getBuffer(), image->getImage(),
             vk::ImageLayout::eTransferDstOptimal, region);

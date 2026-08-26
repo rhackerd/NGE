@@ -3,7 +3,6 @@
 #include "layout.h"
 #include "shader.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/base.h>
 #include <array>
 #include <concepts>
 #include <vector>
@@ -50,10 +49,14 @@ namespace Nova::GE {
             {T::attributes()} -> std::convertible_to<std::vector<vk::VertexInputAttributeDescription>>;      
         };
 
-        class Pipeline::Builder : public Nova::Core::Base::Builder<Pipeline> {
+        class Pipeline::Builder {
+            private: Pipeline* info;
             public:
+                Builder() {
+                    info = new Pipeline();
+                }
                 Builder& addShader(weakRef<Nova::GE::Shader> shader) {
-                    get().shaders.push_back(shader.lock()->getStageInfo());
+                    info->shaders.push_back(shader.lock()->getStageInfo());
                     return *this;
                 }
                 template<typename T> requires HasVertexLayout<T>
@@ -61,115 +64,115 @@ namespace Nova::GE {
                 Builder& setVertexLayoutCustom() {
                     auto binding = T::binding();
                     auto attrs = T::attributes();
-                    get().vertexLayout.setVertexBindingDescriptionCount(1)
+                    info->vertexLayout.setVertexBindingDescriptionCount(1)
                     .setPVertexBindingDescriptions(&binding)
                     .setVertexAttributeDescriptionCount(attrs.size())
                     .setPVertexAttributeDescriptions(attrs.data());
                     return *this;
                 }
                 Builder& setLayout(BakedLayout layout) {
-                    get().layout = layout;
+                    info->layout = layout;
                     return *this;
                 }
                 Builder& addDynamicState(vk::DynamicState state) {
-                    get().dynamicStates.push_back(state);
+                    info->dynamicStates.push_back(state);
                     return *this;
                 };
                 Builder& setViewportState(u32 viewportCount, u32 scissorCount) {
-                    get().viewportState.viewportCount = viewportCount;
-                    get().viewportState.scissorCount = scissorCount;
+                    info->viewportState.viewportCount = viewportCount;
+                    info->viewportState.scissorCount = scissorCount;
                     return *this;
                 }
                 Builder& prepareDefaultVertexLayout() {
-                    get().vertexAttribs.clear();
-                    get().binding = Vertex::binding();
+                    info->vertexAttribs.clear();
+                    info->binding = Vertex::binding();
                     
                     auto attrs = Vertex::attributes();
-                    get().vertexAttribs.insert(
-                        get().vertexAttribs.end(), 
+                    info->vertexAttribs.insert(
+                        info->vertexAttribs.end(), 
                         attrs.begin(), 
                         attrs.end()
                     );
                     
-                    get().vertexLayout
+                    info->vertexLayout
                         .setVertexBindingDescriptionCount(1)
-                        .setPVertexBindingDescriptions(&get().binding)
-                        .setVertexAttributeDescriptionCount(get().vertexAttribs.size())
-                        .setPVertexAttributeDescriptions(get().vertexAttribs.data());
+                        .setPVertexBindingDescriptions(&info->binding)
+                        .setVertexAttributeDescriptionCount(info->vertexAttribs.size())
+                        .setPVertexAttributeDescriptions(info->vertexAttribs.data());
                     return *this;
                 }
                 Builder& prepareDefaultInputAssembly() {
-                    get().inputAssembly.topology = vk::PrimitiveTopology::eTriangleList;
-                    get().inputAssembly.primitiveRestartEnable = false;
+                    info->inputAssembly.topology = vk::PrimitiveTopology::eTriangleList;
+                    info->inputAssembly.primitiveRestartEnable = false;
                     return *this;
                 };
                 Builder& prepareDefaultDynamicState(u32 viewportCount = 1, u32 scissorCount = 1) {
-                    get().dynamicStates.push_back(vk::DynamicState::eViewport);
-                    get().dynamicStates.push_back(vk::DynamicState::eScissor);
+                    info->dynamicStates.push_back(vk::DynamicState::eViewport);
+                    info->dynamicStates.push_back(vk::DynamicState::eScissor);
                     this->setViewportState(viewportCount, scissorCount);
                     return *this;  
                 };
                 Builder& prepareDefaultRasterizer() {
-                    get().rasterizer.depthClampEnable = false;
-                    get().rasterizer.rasterizerDiscardEnable = false;
-                    get().rasterizer.polygonMode = vk::PolygonMode::eFill;
-                    get().rasterizer.lineWidth = 1.0f;
-                    get().rasterizer.cullMode = vk::CullModeFlagBits::eBack;
-                    get().rasterizer.frontFace = vk::FrontFace::eCounterClockwise;
-                    get().rasterizer.depthBiasEnable = false;
+                    info->rasterizer.depthClampEnable = false;
+                    info->rasterizer.rasterizerDiscardEnable = false;
+                    info->rasterizer.polygonMode = vk::PolygonMode::eFill;
+                    info->rasterizer.lineWidth = 1.0f;
+                    info->rasterizer.cullMode = vk::CullModeFlagBits::eBack;
+                    info->rasterizer.frontFace = vk::FrontFace::eCounterClockwise;
+                    info->rasterizer.depthBiasEnable = false;
                     return *this;
                 }
                 Builder& prepareDefaultMultisampling() {
-                    get().multisampling.sampleShadingEnable = false;
-                    get().multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
-                    get().multisampling.minSampleShading = 1.0f;
-                    get().multisampling.pSampleMask = nullptr;
-                    get().multisampling.alphaToCoverageEnable = false;
-                    get().multisampling.alphaToOneEnable = false;
+                    info->multisampling.sampleShadingEnable = false;
+                    info->multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
+                    info->multisampling.minSampleShading = 1.0f;
+                    info->multisampling.pSampleMask = nullptr;
+                    info->multisampling.alphaToCoverageEnable = false;
+                    info->multisampling.alphaToOneEnable = false;
                     return *this;
                 }
                 Builder& setMSAA(vk::SampleCountFlagBits samples) {
-                    get().multisampling.sampleShadingEnable = false;
-                    get().multisampling.rasterizationSamples = samples;
-                    get().multisampling.minSampleShading = 1.0f;
-                    get().multisampling.pSampleMask = nullptr;
-                    get().multisampling.alphaToCoverageEnable = false;
-                    get().multisampling.alphaToOneEnable = false;
+                    info->multisampling.sampleShadingEnable = false;
+                    info->multisampling.rasterizationSamples = samples;
+                    info->multisampling.minSampleShading = 1.0f;
+                    info->multisampling.pSampleMask = nullptr;
+                    info->multisampling.alphaToCoverageEnable = false;
+                    info->multisampling.alphaToOneEnable = false;
                     return *this;
                 };
                 Builder& prepareDefaultColorBlending() {
                     this->prepareDefaultBlendOp();
-                    get().colorBlending.attachmentCount = 1;
-                    get().colorBlending.pAttachments = &get().colorBlendAttachment;
-                    get().colorBlending.blendConstants[0] = 0.0f;
-                    get().colorBlending.blendConstants[1] = 0.0f;
-                    get().colorBlending.blendConstants[2] = 0.0f;
-                    get().colorBlending.blendConstants[3] = 0.0f;
+                    info->colorBlending.attachmentCount = 1;
+                    info->colorBlending.pAttachments = &info->colorBlendAttachment;
+                    info->colorBlending.blendConstants[0] = 0.0f;
+                    info->colorBlending.blendConstants[1] = 0.0f;
+                    info->colorBlending.blendConstants[2] = 0.0f;
+                    info->colorBlending.blendConstants[3] = 0.0f;
                     return *this;
                 }
                 Builder& setSampleCount(vk::SampleCountFlagBits samples) {
-                    get().samples = samples;
+                    info->samples = samples;
                     return *this;
                 }
                 Builder& prepareDefaultDepthStencil() {
-                    get().depthStencil.depthTestEnable = true;
-                    get().depthStencil.depthWriteEnable = true;
-                    get().depthStencil.depthCompareOp = vk::CompareOp::eLess;
-                    get().depthStencil.depthBoundsTestEnable = false;
-                    get().depthStencil.minDepthBounds = 0.0f;
-                    get().depthStencil.maxDepthBounds = 1.0f;
-                    get().depthStencil.stencilTestEnable = false;
+                    info->depthStencil.depthTestEnable = true;
+                    info->depthStencil.depthWriteEnable = true;
+                    info->depthStencil.depthCompareOp = vk::CompareOp::eLess;
+                    info->depthStencil.depthBoundsTestEnable = false;
+                    info->depthStencil.minDepthBounds = 0.0f;
+                    info->depthStencil.maxDepthBounds = 1.0f;
+                    info->depthStencil.stencilTestEnable = false;
                     return *this;
                 }
                 Builder& prepareDefaultBlendOp() {
-                    get().colorBlendAttachment.blendEnable = false;
-                    get().colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
-                    get().colorBlendAttachment.srcColorBlendFactor = vk::BlendFactor::eOne;
-                    get().colorBlendAttachment.dstColorBlendFactor = vk::BlendFactor::eZero;
-                    get().colorBlendAttachment.colorBlendOp = vk::BlendOp::eAdd;
-                    get().colorBlendAttachment.srcAlphaBlendFactor = vk::BlendFactor::eOne;
-                    get().colorBlendAttachment.dstAlphaBlendFactor = vk::BlendFactor::eZero;
-                    get().colorBlendAttachment.alphaBlendOp = vk::BlendOp::eAdd;
+                    info->colorBlendAttachment.blendEnable = false;
+                    info->colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
+                    info->colorBlendAttachment.srcColorBlendFactor = vk::BlendFactor::eOne;
+                    info->colorBlendAttachment.dstColorBlendFactor = vk::BlendFactor::eZero;
+                    info->colorBlendAttachment.colorBlendOp = vk::BlendOp::eAdd;
+                    info->colorBlendAttachment.srcAlphaBlendFactor = vk::BlendFactor::eOne;
+                    info->colorBlendAttachment.dstAlphaBlendFactor = vk::BlendFactor::eZero;
+                    info->colorBlendAttachment.alphaBlendOp = vk::BlendOp::eAdd;
                     return *this;
                 }
 
@@ -184,12 +187,18 @@ namespace Nova::GE {
                     return *this;
                 }
                 Builder& setSwapchainFormat(vk::Format format) {
-                    get().format = format;
+                    info->format = format;
                     return *this;
                 }
                 Builder& setDepthFormat(vk::Format format) {
-                    get().depthFormat = format;
+                    info->depthFormat = format;
                     return *this;
+                }
+                Pipeline build() {
+                    Pipeline result = *info;
+                    delete info;
+                    info = nullptr;
+                    return result;
                 }
         };
     };

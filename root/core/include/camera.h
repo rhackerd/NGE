@@ -3,8 +3,8 @@
 #include "buffer.h"
 #include "descMan.h"
 #include "system.h"
-#include <Nova/Core/structs.hpp>
 #include <cglm/vec3.h>
+<<<<<<< Updated upstream
 
 // TODO: modernize
 // ========================================
@@ -16,6 +16,9 @@
 // Desc     : A short high level wrapper for camera, is still kinda low level, but can be nicely used for low level and is used by High level wrapper
 // Info     : Properly fix the alignas
 // ========================================
+=======
+#include <sys/types.h>
+>>>>>>> Stashed changes
 
 namespace Nova::GE {
 
@@ -26,8 +29,8 @@ namespace Nova::GE {
     #endif
 
     struct alignas(NOVA_MAT4_ALIGN) CameraData {
-        Nova::Core::Mat4 view;
-        Nova::Core::Mat4 proj;
+        mat4 view;
+        mat4 proj;
     };
 
     class Camera {
@@ -43,13 +46,16 @@ namespace Nova::GE {
             void setOrthographic(float left, float right, float bottom, float top, float nearP, float farP);
             void setAspect(float aspect);
 
-            void setPosition(const Nova::Core::Vec3& pos);
-            void setTarget(const Nova::Core::Vec3& target);
-            void setUp(const Nova::Core::Vec3& up);
-            void setRotation(const Nova::Core::Quat& rot);
+            void setPosition(vec3& pos);
+            void setPosition(float x,float y,float z) {m_pos[0] = x; m_pos[1] = y; m_pos[2] = z; m_dirty = true;}
+            void setTarget(vec3& target);
+            void setTarget(float x,float y,float z) {m_target[0] = x; m_target[1] = y; m_target[2] = z; m_dirty = true;}
+            void setUp(vec3& up);
+            void setUp(float x,float y,float z) {m_up[0] = x; m_up[1] = y; m_up[2] = z; m_dirty = true;}
+            void setRotation(versor& rot);
 
-            void move(const Nova::Core::Vec3& delta);
-            void rotate(const Nova::Core::Quat& delta);
+            void move(vec3& delta);
+            void rotate(vec3& deltaEulerRad);
 
             void update();
 
@@ -58,11 +64,11 @@ namespace Nova::GE {
             size_t                 getDescOffset()  const { return m_offset; }
             bool                   isValid()        const { return m_buffer.isValid(); }
 
-            Nova::Core::Vec3       getPosition()    const { return m_pos; }
-            Nova::Core::Vec3       getForward()     const;
-            Nova::Core::Vec3       getRight()       const;
-            Nova::Core::Vec3       getUp()          const;
-            SetHandle              getHandle()      const { return handle; }
+            void        getPosition(vec3 out) { glm_vec3_copy(m_pos, out); }
+            void        getForward(vec3 out);
+            void        getRight(vec3 out);
+            void        getUp(vec3 out);
+            SetHandle   getHandle() { return handle; }
 
             void initDescriptor(DescriptorMan& man, SetHandle& setLayout) {
                 handle = man.allocateSet(setLayout.layout, setLayout.setIndex);
@@ -77,10 +83,10 @@ namespace Nova::GE {
             size_t              m_offset    = 0;
             CameraData          m_data;
 
-            Nova::Core::Vec3    m_pos       = {0.0f, 0.0f, 0.0f};
-            Nova::Core::Vec3    m_target    = {0.0f, 0.0f, 0.0f};
-            Nova::Core::Vec3    m_up        = {0.0f, 1.0f, 0.0f};
-            Nova::Core::Quat    m_rotation;
+            vec3    m_pos       = {0.0f, 0.0f, 0.0f};
+            vec3    m_target    = {0.0f, 0.0f, 0.0f};
+            vec3    m_up        = {0.0f, 1.0f, 0.0f};
+            versor  m_rotation  = {0.0f, 0.0f, 0.0f, 1.0f};
 
             enum class ProjType {Perspective, Orthographic} m_projType = ProjType::Perspective;
             float               m_fovDeg    = 60.0f;

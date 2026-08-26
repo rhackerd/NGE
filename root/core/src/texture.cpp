@@ -5,18 +5,16 @@
 #include "vulkan/vulkan.hpp"
 #include <filesystem>
 #include <memory>
-#include <nova/logger/logger.hpp>
 #include <vulkan/vulkan.hpp>
 #include <vulkan/vulkan_core.h>
 
 namespace Nova::GE {
-    static Core::Logger logger("Texture");
     bool Texture::init(const std::string path, Device& device, vk::Sampler sampler) {
         int w,h,ch;
-        NOVA_INFO(logger, "Loading {}", path);
+        printf("texture init(): loading %s\n", path.c_str());
         u8* pixels = stbi_load(path.c_str(), &w, &h, &ch, STBI_rgb_alpha);
         if (!pixels) {
-            NOVA_INFO(logger, "Failed to load {}", stbi_failure_reason());
+            printf("Texture init: failed to load %s\n", stbi_failure_reason());
             return false;
         }
 

@@ -5,21 +5,14 @@
 #include "core.h"
 #include "system.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Desktop/core.h>
-#include <Nova/Desktop/window.hpp>
+#include <cglm/vec2.h>
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <stdexcept>
 #include <vulkan/vulkan_core.h>
-#pragma once
-#include <vector>
-#include <vulkan/vulkan.hpp>
-#include <Nova/Core/core.h>
-#include <vk_mem_alloc.h>
-
+#include <SDL3/SDL.h>
 #include "device.h"
-#include <Nova/Core/structs.hpp>
 
 // TODO: modernize
 // ========================================
@@ -33,14 +26,15 @@
 // ========================================
 
 namespace Nova::GE {
-
+    
 
     namespace CreateInfo {
         struct Swapchain {
             Nova::GE::Device* device;
-            Nova::Core::Vec2 extent;
-            Nova::Desktop::Window* window;
+            vec2 extent;
+            SDL_Window* window;
             vk::SampleCountFlagBits Samples = vk::SampleCountFlagBits::e4;
+            vk::SurfaceKHR surface;
             
             class Builder {
                 private: Swapchain* info;
@@ -52,13 +46,25 @@ namespace Nova::GE {
                         return *this;
                     }
 
-                    Builder& setExtent(Nova::Core::Vec2 extent) {
-                        info->extent = extent;
+                    Builder& setExtent(vec2& extent) {
+                        glm_vec2_copy(extent, info->extent);
                         return *this;
                     }
 
-                    Builder& assignWindow(Nova::Desktop::Window& win) {
+
+                    Builder& setExtent(float w, float h) {
+                        info->extent[0] = w;
+                        info->extent[1] = h;
+                        return *this;
+                    }
+
+                    Builder& assignWindow(SDL_Window& win) {
                         info->window = &win;
+                        return *this;
+                    }
+
+                    Builder& assignSurface(vk::SurfaceKHR surface) {
+                        info->surface = surface;
                         return *this;
                     }
 
@@ -186,15 +192,12 @@ namespace Nova::GE {
 
             CI::Swapchain m_createInfo;
             
-            Nova::Core::Vec2 extent;
+            vec2 extent;
             Nova::GE::Device* device;
-            Nova::Desktop::Window* window;
+            SDL_Window* window;
 
             vk::SampleCountFlagBits m_sampleCount = vk::SampleCountFlagBits::e1;
             std::vector<weakRef<Image>> m_msColorImagePtrs;
             std::vector<vk::ImageView> m_msColorImageViews;
-
-        private:
-            NOVA_LOG_DEF("Swapchain");
     };  
 };

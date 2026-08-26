@@ -2,11 +2,9 @@
 
 #include "descMan.h"
 #include "sampledImage.h"
-#include <Nova/Core/log.h>
-#include <Nova/Core/macros.h>
 #include <string>
 #include <vulkan/vulkan_core.h>
-#include "stb_image.h"
+#include "stb/stb_image.h"
 #include "vulkan/vulkan.hpp"
 
 // TODO: modernize

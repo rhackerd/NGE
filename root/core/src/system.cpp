@@ -1,12 +1,12 @@
 #include "system.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/core.h>
+#include <fmt/format.h>
 
 namespace Nova::GE {
     bool System::init(CreateInfo::System& createInfo) {
-        NINFO("Initializing {} v{}.{}.{}", createInfo.appName, VK_VERSION_MAJOR(createInfo.appVersion), VK_VERSION_MINOR(createInfo.appVersion), VK_VERSION_PATCH(createInfo.appVersion));
-        NINFO("Initiating System");
-        NINFO("Initiating Dynamic DIspatcher");
+        // NINFO("Initializing {} v{}.{}.{}", createInfo.appName, VK_VERSION_MAJOR(createInfo.appVersion), VK_VERSION_MINOR(createInfo.appVersion), VK_VERSION_PATCH(createInfo.appVersion));
+        // NINFO("Initiating System");
+        // NINFO("Initiating Dynamic DIspatcher");
 
         vk::detail::DynamicLoader dl;
         PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr = dl.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
@@ -50,41 +50,37 @@ namespace Nova::GE {
         instance = vk::createInstance(instanceCreateInfo, nullptr, dld);
 
         if (instance == nullptr) {
-            NERROR("Failed to create instance");
+            printf("system init(): Failed to create instance\n");
             return false;
         }
 
-        NINFO("System has been initiated");
-        NINFO(" ├▶ API Version: {}.{}.{}", VK_VERSION_MAJOR(createInfo.apiVersion), VK_VERSION_MINOR(createInfo.apiVersion), VK_VERSION_PATCH(createInfo.apiVersion));
-        NINFO(" ├▶ App Version: {}.{}.{}", VK_VERSION_MAJOR(createInfo.appVersion), VK_VERSION_MINOR(createInfo.appVersion), VK_VERSION_PATCH(createInfo.appVersion));
-        NINFO(" ├▶ Engine Version: {}.{}.{}", VK_VERSION_MAJOR(createInfo.engineVersion), VK_VERSION_MINOR(createInfo.engineVersion), VK_VERSION_PATCH(createInfo.engineVersion));
-        NINFO(" ├▶ App Name: {}", createInfo.appName);
-        NINFO(" └▶ Extensions: ");
+        printf("System has been initiated\n");
+        printf("%s\n", fmt::format(" ├▶ API Version: {}.{}.{}", VK_VERSION_MAJOR(createInfo.apiVersion), VK_VERSION_MINOR(createInfo.apiVersion), VK_VERSION_PATCH(createInfo.apiVersion)).c_str());
+        printf("%s\n", fmt::format(" ├▶ App Version: {}.{}.{}", VK_VERSION_MAJOR(createInfo.appVersion), VK_VERSION_MINOR(createInfo.appVersion), VK_VERSION_PATCH(createInfo.appVersion)).c_str());
+        printf("%s\n", fmt::format(" ├▶ Engine Version: {}.{}.{}", VK_VERSION_MAJOR(createInfo.engineVersion), VK_VERSION_MINOR(createInfo.engineVersion), VK_VERSION_PATCH(createInfo.engineVersion)).c_str());
+        printf("%s\n", fmt::format(" ├▶ App Name: {}", createInfo.appName).c_str());
+        printf("%s\n", fmt::format(" └▶ Extensions: ").c_str());
         for (const auto& extension : createInfo.extensions) {
             // Check if last
             if (extension == createInfo.extensions.back()) {
-                NINFO("  └─➤ {}", extension);
+                printf("  └─➤ %s\n", extension);
             }else {
-                NINFO("  ├─➤ {}", extension);
+                printf("  ├─➤ %s\n", extension);
             }
         }
 
-        if (createInfo.validation) {
-            NINFO(" - Validation enabled");
-        }
-
-        NINFO("Stepping up dispatcher for instance");
+        // NINFO("Stepping up dispatcher for instance");
         dld.init(instance);
-        NINFO("Stepped");
+        // NINFO("Stepped");
 
         return true;
     }
 
     void System::shutdown() {
         if (!instance) return;
-        NINFO("Shutting down System");
+        printf("system shutdown(): Shutting down System\n");
         instance.destroy();
         instance = nullptr;
-        NINFO("Shutting down");
+        printf("system shutdown(): Shutting down\n");
     }
 };

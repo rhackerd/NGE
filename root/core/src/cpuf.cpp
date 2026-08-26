@@ -189,7 +189,7 @@ CBSlot* CPUF::batchSubmit(RenderTarget& target, std::vector<std::function<void(C
                 .setResolveMode(vk::ResolveModeFlagBits::eAverage)
                 .setResolveImageLayout(vk::ImageLayout::eColorAttachmentOptimal)
                 .setClearValue(vk::ClearColorValue{std::array<float, 4>{
-                    m_clearColor.x(), m_clearColor.y(), m_clearColor.z(), 1.0f}});
+                    m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f}});
         }else {
             colorAttachment
                 .setImageView(target.view)
@@ -197,7 +197,7 @@ CBSlot* CPUF::batchSubmit(RenderTarget& target, std::vector<std::function<void(C
                 .setLoadOp(vk::AttachmentLoadOp::eClear)
                 .setStoreOp(vk::AttachmentStoreOp::eStore)
                 .setClearValue(vk::ClearColorValue{std::array<float, 4>{
-                    m_clearColor.x(), m_clearColor.y(), m_clearColor.z(), 1.0f}});
+                    m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f}});
         }
 
         vk::RenderingAttachmentInfo depthAttachment{};
@@ -213,7 +213,7 @@ CBSlot* CPUF::batchSubmit(RenderTarget& target, std::vector<std::function<void(C
         vk::RenderingInfo rInfo{};
         rInfo
             .setFlags(vk::RenderingFlagBits::eContentsSecondaryCommandBuffers)
-            .setRenderArea(vk::Rect2D{{0, 0}, {(u32)target.extent.x(), (u32)target.extent.y()}})
+            .setRenderArea(vk::Rect2D{{0, 0}, {(u32)target.extent[0], (u32)target.extent[1]}})
             .setLayerCount(1)
             .setColorAttachments(colorAttachment)
             .setPDepthAttachment(&depthAttachment);

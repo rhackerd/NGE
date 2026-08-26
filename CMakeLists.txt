@@ -18,11 +18,25 @@ include(cmake/CPM.cmake)
 
 include(Libs.cmake)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 find_package(fmt CONFIG REQUIRED)
 find_package(VulkanMemoryAllocator CONFIG REQUIRED)
 find_package(Vulkan)
 find_package(assimp CONFIG REQUIRED)
-find_package(Stb REQUIRED)
+
+
+CPMAddPackage(
+    NAME stb
+    GITHUB_REPOSITORY nothings/stb
+    GIT_TAG master
+    DOWNLOAD_ONLY YES
+)
+if(stb_ADDED)
+    add_library(Stb::Stb INTERFACE IMPORTED)
+    target_include_directories(Stb::Stb INTERFACE ${stb_SOURCE_DIR})
+endif()
+
 
 add_subdirectory(root/core)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)

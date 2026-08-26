@@ -1,7 +1,6 @@
 #pragma once
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/structs.hpp>
-#include <array>
+#include <cglm/types.h>
 #include <cstddef>
 #include <memory>
 #include <string>
@@ -10,6 +9,7 @@
 #include <cstdint>
 #include <fstream>
 
+<<<<<<< Updated upstream
 // TODO: modernize
 // ========================================
 // Metadata
@@ -20,6 +20,8 @@
 // Desc     : A file that should be implemented by all files
 // Info     : Split functionality, for example move version managment to version.h, and some things are already in NovaCore
 // ========================================
+=======
+>>>>>>> Stashed changes
 
 namespace Nova::GE {
     struct Version {
@@ -61,9 +63,9 @@ namespace Nova::GE {
 
 
     struct Vertex {
-        Nova::Core::Vec3 pos;
-        Nova::Core::Vec3 normal;
-        Nova::Core::Vec2 uv;
+        vec3 pos;
+        vec3 normal;
+        vec3 uv;
 
         static vk::VertexInputBindingDescription binding() {
             return {0, sizeof(Vertex), vk::VertexInputRate::eVertex};
