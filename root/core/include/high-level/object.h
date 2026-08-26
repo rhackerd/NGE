@@ -61,7 +61,7 @@ namespace Nova::Graphics {
 
         Nova::GE::Mesh m_mesh;
         Nova::GE::ref<Nova::GE::Texture> m_texture;
-        mat4 m_model;
+        mat4 m_model = GLM_MAT4_IDENTITY_INIT;
         Nova::GE::ImageSampler* sampler;
     };
 };

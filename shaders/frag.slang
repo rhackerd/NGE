@@ -9,5 +9,6 @@ Texture2D u_texture;
 
 [shader("fragment")]
 float4 main(VertexOutput v) : SV_Target0 {
-    return u_texture.Sample(u_sampler, v.uv);
+    return float4(0.0f, 0.0f, 0.0f, 1.0f);
+    // return u_texture.Sample(u_sampler, v.uv);
 }

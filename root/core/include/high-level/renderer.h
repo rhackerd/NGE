@@ -11,7 +11,6 @@
 #include "swapchain.h"
 #include "texture.h"
 #include "vulkan/vulkan.hpp"
-#include <functional>
 #include <vector>
 
 

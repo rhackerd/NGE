@@ -13,11 +13,6 @@
 #include <vulkan/vulkan.hpp>
 #include <vk_mem_alloc.h>
 
-<<<<<<< Updated upstream
-#include <Nova/Core/structs.hpp>
-
-#include <Nova/Core/macros.h>
-
 
 // TODO: modernize
 // ========================================
@@ -30,8 +25,6 @@
 // Info     : NPretty much modern, only needs a revision and remove some includes.
 // ========================================
 
-=======
->>>>>>> Stashed changes
 namespace Nova::GE {
 
 

@@ -54,14 +54,6 @@ int main() {
 
     Nova::Graphics::Renderer renderer(gfx);
 
-<<<<<<< Updated upstream
-
-    // Try texture
-    // auto texture = renderer.createTexture("aircraft.png");
-
-    // Setup scene
-=======
->>>>>>> Stashed changes
     auto camera = renderer.createCamera();
     auto _object = renderer.createObject();
     auto object = _object.lock();
@@ -113,7 +105,7 @@ int main() {
         flyCam.getForward(fx, fy, fz);
 
         // right vector = forward x worldUp
-        float rx = fz, rz = -fx; // simplified cross with (0,1,0) on the XZ plane
+        float rx = -fz, rz = fx;
         float len = sqrtf(rx * rx + rz * rz);
         if (len > 0.0001f) { rx /= len; rz /= len; }
 

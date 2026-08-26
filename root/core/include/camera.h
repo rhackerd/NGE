@@ -4,7 +4,6 @@
 #include "descMan.h"
 #include "system.h"
 #include <cglm/vec3.h>
-<<<<<<< Updated upstream
 
 // TODO: modernize
 // ========================================
@@ -16,9 +15,6 @@
 // Desc     : A short high level wrapper for camera, is still kinda low level, but can be nicely used for low level and is used by High level wrapper
 // Info     : Properly fix the alignas
 // ========================================
-=======
-#include <sys/types.h>
->>>>>>> Stashed changes
 
 namespace Nova::GE {
 

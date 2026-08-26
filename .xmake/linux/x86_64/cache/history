@@ -1,12 +1,6 @@
 {
     cmdlines = {
         "xmake ",
-        "xmake ",
-        "xmake ",
-        "xmake ",
-        "xmake ",
-        "xmake ",
-        "xmake ",
         "xmake check",
         "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/config.lua",
         "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/update_intellisense.lua .vscode clangd",
@@ -64,6 +58,12 @@
         "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/config.lua",
         "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/explorer.lua",
         "xmake check",
-        "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/update_intellisense.lua .vscode clangd"
+        "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/update_intellisense.lua .vscode clangd",
+        "xmake ",
+        "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/explorer.lua",
+        "xmake l /home/rhacker/.vscode-oss/extensions/tboox.xmake-vscode-2.5.4-universal/assets/explorer.lua",
+        "xmake ",
+        "xmake ",
+        "xmake "
     }
 }

@@ -9,7 +9,6 @@
 #include <cstdint>
 #include <fstream>
 
-<<<<<<< Updated upstream
 // TODO: modernize
 // ========================================
 // Metadata
@@ -20,8 +19,6 @@
 // Desc     : A file that should be implemented by all files
 // Info     : Split functionality, for example move version managment to version.h, and some things are already in NovaCore
 // ========================================
-=======
->>>>>>> Stashed changes
 
 namespace Nova::GE {
     struct Version {

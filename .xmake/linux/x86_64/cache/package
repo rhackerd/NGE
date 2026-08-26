@@ -1,91 +1,117 @@
 {
-    assimp = {
-        version = "6.0.5",
+    fmt = {
+        links = "fmt",
+        libfiles = {
+            "/usr/lib/libfmt-c.a",
+            "/usr/lib/libfmt.so"
+        },
+        __requirestr = "fmt",
+        static = true,
         __enabled = true,
+        envs = {
+            PATH = {
+                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
+            }
+        },
+        version = "12.2.0",
+        shared = true
+    },
+    ["vulkan-headers"] = {
+        version = "1.4.357.0",
+        envs = {
+            PATH = {
+                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
+            }
+        },
+        __requirestr = "vulkan-headers",
+        __enabled = true
+    },
+    assimp = {
         links = {
             "assimp",
             "minizip",
             "z"
         },
-        shared = true,
         libfiles = {
             "/usr/lib/libassimp.so",
             "/usr/lib/libminizip.so"
         },
+        __requirestr = "assimp",
+        shared = true,
         envs = {
             PATH = {
                 "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
                 "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
             }
         },
-        __requirestr = "assimp"
+        version = "6.0.5",
+        __enabled = true
     },
-    fmt = {
-        libfiles = {
-            "/usr/lib/libfmt-c.a",
-            "/usr/lib/libfmt.so"
+    imgui = {
+        sysincludedirs = {
+            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include",
+            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/imgui",
+            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/backends",
+            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/misc/cpp"
         },
-        version = "12.2.0",
         __enabled = true,
-        links = "fmt",
+        __requireconfs = {
+            configs = {
+                vulkan = true,
+                sdl3 = true
+            }
+        },
+        installdir = "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845",
+        version = "v1.92.9",
+        libfiles = {
+            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib/libimgui.a",
+            "/usr/lib/libSDL3.so",
+            "/usr/lib/libSDL3_test.a"
+        },
+        __requirestr = "imgui",
+        links = {
+            "imgui",
+            "SDL3"
+        },
         static = true,
         envs = {
             PATH = {
                 "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
+                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin",
+                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
+                "/home/rhacker/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
+                "/home/rhacker/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2/bin",
+                "/home/rhacker/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee/bin",
+                "/home/rhacker/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5/bin",
+                "/home/rhacker/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
+                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
+                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
+            },
+            PYTHONPATH = {
+                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
+            },
+            LD_LIBRARY_PATH = {
+                "/home/rhacker/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
+                "/home/rhacker/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
+                "/home/rhacker/.xmake/packages/l/libxcb/1.17.0/8212376093344ea7a7a61a715b1bcdd5/lib",
+                "/home/rhacker/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib",
+                "/home/rhacker/.xmake/packages/l/libxfixes/6.0.1/32cbba7be85a4185b00b52ca82de8150/lib",
+                "/home/rhacker/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
+                "/home/rhacker/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
             }
         },
-        shared = true,
-        __requirestr = "fmt"
+        linkdirs = "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib",
+        license = "MIT"
     },
     ["vulkan-loader"] = {
-        libfiles = {
-            "/usr/lib/libvulkan.so",
-            "/usr/lib/libXrandr.so",
-            "/usr/lib/libXext.so",
-            "/usr/lib/libXrender.so",
-            "/usr/lib/libX11.so",
-            "/usr/lib/libX11-xcb.so",
-            "/usr/lib/libxcb-composite.so",
-            "/usr/lib/libxcb-damage.so",
-            "/usr/lib/libxcb-dbe.so",
-            "/usr/lib/libxcb-dpms.so",
-            "/usr/lib/libxcb-dri2.so",
-            "/usr/lib/libxcb-dri3.so",
-            "/usr/lib/libxcb-glx.so",
-            "/usr/lib/libxcb-present.so",
-            "/usr/lib/libxcb-randr.so",
-            "/usr/lib/libxcb-record.so",
-            "/usr/lib/libxcb-render.so",
-            "/usr/lib/libxcb-res.so",
-            "/usr/lib/libxcb-screensaver.so",
-            "/usr/lib/libxcb-shape.so",
-            "/usr/lib/libxcb-shm.so",
-            "/usr/lib/libxcb-sync.so",
-            "/usr/lib/libxcb-xf86dri.so",
-            "/usr/lib/libxcb-xfixes.so",
-            "/usr/lib/libxcb-xinerama.so",
-            "/usr/lib/libxcb-xinput.so",
-            "/usr/lib/libxcb-xkb.so",
-            "/usr/lib/libxcb-xtest.so",
-            "/usr/lib/libxcb-xv.so",
-            "/usr/lib/libxcb-xvmc.so",
-            "/usr/lib/libxcb.so",
-            "/usr/lib/libXau.so",
-            "/usr/lib/libXdmcp.so",
-            "/usr/lib/libxkbcommon.so",
-            "/usr/lib/libxkbregistry.so",
-            "/usr/lib/libwayland-client.so",
-            "/usr/lib/libwayland-cursor.so",
-            "/usr/lib/libwayland-egl.so",
-            "/usr/lib/libwayland-server.so",
-            "/usr/lib/libxml2.so",
-            "/usr/lib/libffi.so",
-            "/usr/lib/libexpat.so"
-        },
-        __requirestr = "vulkan-loader",
-        version = "1.4.357",
-        __enabled = true,
+        defines = "WITH_GZFILEOP",
+        shared = true,
         links = {
             "vulkan",
             "Xrandr",
@@ -131,18 +157,53 @@
             "ffi",
             "expat"
         },
-        defines = "WITH_GZFILEOP",
+        libfiles = {
+            "/usr/lib/libvulkan.so",
+            "/usr/lib/libXrandr.so",
+            "/usr/lib/libXext.so",
+            "/usr/lib/libXrender.so",
+            "/usr/lib/libX11.so",
+            "/usr/lib/libX11-xcb.so",
+            "/usr/lib/libxcb-composite.so",
+            "/usr/lib/libxcb-damage.so",
+            "/usr/lib/libxcb-dbe.so",
+            "/usr/lib/libxcb-dpms.so",
+            "/usr/lib/libxcb-dri2.so",
+            "/usr/lib/libxcb-dri3.so",
+            "/usr/lib/libxcb-glx.so",
+            "/usr/lib/libxcb-present.so",
+            "/usr/lib/libxcb-randr.so",
+            "/usr/lib/libxcb-record.so",
+            "/usr/lib/libxcb-render.so",
+            "/usr/lib/libxcb-res.so",
+            "/usr/lib/libxcb-screensaver.so",
+            "/usr/lib/libxcb-shape.so",
+            "/usr/lib/libxcb-shm.so",
+            "/usr/lib/libxcb-sync.so",
+            "/usr/lib/libxcb-xf86dri.so",
+            "/usr/lib/libxcb-xfixes.so",
+            "/usr/lib/libxcb-xinerama.so",
+            "/usr/lib/libxcb-xinput.so",
+            "/usr/lib/libxcb-xkb.so",
+            "/usr/lib/libxcb-xtest.so",
+            "/usr/lib/libxcb-xv.so",
+            "/usr/lib/libxcb-xvmc.so",
+            "/usr/lib/libxcb.so",
+            "/usr/lib/libXau.so",
+            "/usr/lib/libXdmcp.so",
+            "/usr/lib/libxkbcommon.so",
+            "/usr/lib/libxkbregistry.so",
+            "/usr/lib/libwayland-client.so",
+            "/usr/lib/libwayland-cursor.so",
+            "/usr/lib/libwayland-egl.so",
+            "/usr/lib/libwayland-server.so",
+            "/usr/lib/libxml2.so",
+            "/usr/lib/libffi.so",
+            "/usr/lib/libexpat.so"
+        },
+        __requirestr = "vulkan-loader",
+        sysincludedirs = "/usr/include/libxml2",
         envs = {
-            PYTHONPATH = {
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
-            },
-            LD_LIBRARY_PATH = {
-                "/home/rhacker/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib",
-                "/home/rhacker/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
-                "/home/rhacker/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
-                "/home/rhacker/.xmake/packages/l/libxcb/1.17.0/8212376093344ea7a7a61a715b1bcdd5/lib",
-                "/home/rhacker/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib"
-            },
             PATH = {
                 "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
                 "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
@@ -155,85 +216,24 @@
                 "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
                 "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
                 "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin"
-            }
-        },
-        shared = true,
-        sysincludedirs = "/usr/include/libxml2"
-    },
-    stb = {
-        version = "r2232.2c980bb",
-        __enabled = true,
-        __requirestr = "stb"
-    },
-    ["vulkan-headers"] = {
-        envs = {
-            PATH = {
-                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
-            }
-        },
-        version = "1.4.357.0",
-        __enabled = true,
-        __requirestr = "vulkan-headers"
-    },
-    imgui = {
-        __requireconfs = {
-            configs = {
-                sdl3 = true,
-                vulkan = true
-            }
-        },
-        static = true,
-        libfiles = {
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib/libimgui.a",
-            "/usr/lib/libSDL3.so",
-            "/usr/lib/libSDL3_test.a"
-        },
-        __requirestr = "imgui",
-        license = "MIT",
-        version = "v1.92.9",
-        __enabled = true,
-        links = {
-            "imgui",
-            "SDL3"
-        },
-        installdir = "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845",
-        linkdirs = "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib",
-        envs = {
+            },
             PYTHONPATH = {
                 "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
             },
-            PATH = {
-                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin",
-                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
-                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
-                "/home/rhacker/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
-                "/home/rhacker/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2/bin",
-                "/home/rhacker/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee/bin",
-                "/home/rhacker/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5/bin",
-                "/home/rhacker/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
-                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
-                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
-            },
             LD_LIBRARY_PATH = {
+                "/home/rhacker/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib",
                 "/home/rhacker/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
                 "/home/rhacker/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
                 "/home/rhacker/.xmake/packages/l/libxcb/1.17.0/8212376093344ea7a7a61a715b1bcdd5/lib",
-                "/home/rhacker/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib",
-                "/home/rhacker/.xmake/packages/l/libxfixes/6.0.1/32cbba7be85a4185b00b52ca82de8150/lib",
-                "/home/rhacker/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
-                "/home/rhacker/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
+                "/home/rhacker/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib"
             }
         },
-        sysincludedirs = {
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include",
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/imgui",
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/backends",
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/misc/cpp"
-        }
+        __enabled = true,
+        version = "1.4.357"
+    },
+    stb = {
+        version = "r2232.2c980bb",
+        __requirestr = "stb",
+        __enabled = true
     }
 }

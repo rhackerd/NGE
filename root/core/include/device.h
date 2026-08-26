@@ -18,30 +18,6 @@
 #include <vulkan/vulkan.hpp>
 #include <vk_mem_alloc.h>
 #include "shader.h"
-<<<<<<< Updated upstream
-#include <Nova/Core/macros.h>
-
-// TODO: modernize
-// ========================================
-// Metadata
-//
-// State    : #legacy@nge3
-// Origin   : @nge2
-//
-// Desc     : Overall per device manger
-// Info     : This file only works, does not look good and is very bad, maybe full rewrite and a PR of itself.
-// ========================================
-
-namespace Nova::Core {
-    [[noreturn]] inline void assertFail(const char* type, const char* msg, 
-                                         std::source_location loc = std::source_location::current()) {
-        // use your existing logger or just stderr
-        fprintf(stderr, "[%s] %s — %s:%d\n", type, msg, loc.file_name(), loc.line());
-        std::abort();
-    }
-}
-=======
->>>>>>> Stashed changes
 
 namespace Nova::GE {
     struct DeviceCaps {
@@ -322,14 +298,8 @@ namespace Nova::GE {
             // TODO: Remove global CmdPool, should be managed by CPUF.h
             vk::CommandPool commandPool = VK_NULL_HANDLE;
 
-<<<<<<< Updated upstream
-            // TODO: Duplicate Logger
-            NOVA_LOG_DEF("Device");
-            std::unique_ptr<Nova::Core::Logger> log;
-=======
             // std::unique_ptr<Nova::Core::Logger> log;
             u16 devId = 0;
->>>>>>> Stashed changes
 
             Nova::GE::DescriptorMan descriptorManager;
 
