@@ -4,24 +4,14 @@
 
 #include "system.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/base.h>
-#include <Nova/Core/log.h>
-#include <Nova/Desktop/core.h>
-#include <Nova/Desktop/window.hpp>
+#include <cglm/types.h>
+#include <cglm/vec2.h>
 #include <cstdint>
 #include <memory>
-#include <optional>
-#include <stdexcept>
 #include <vulkan/vulkan_core.h>
-#pragma once
 #include <vector>
 #include <vulkan/vulkan.hpp>
-#include <Nova/Core/core.h>
 #include <vk_mem_alloc.h>
-
-#include <Nova/Core/structs.hpp>
-
-#include <Nova/Core/macros.h>
 
 
 // TODO: modernize
@@ -55,50 +45,68 @@ namespace Nova::GE {
         };
 
 
-        class Image::Builder : public Nova::Core::Base::Builder<Image> {
+        class Image::Builder {
+            private: Image* info;
             public:
                 Builder() {
-                    get().info.usage = vk::ImageUsageFlagBits::eSampled;
-                    get().allocator = nullptr;
+                    info = new Image();
+                    info->info.usage = vk::ImageUsageFlagBits::eSampled;
+                    info->allocator = nullptr;
                 }
 
                 Builder& setAllocator(VmaAllocator * allocator) {
-                    get().allocator = allocator;
+                    info->allocator = allocator;
                     return *this;
                 }
 
                 Builder& setDevice(vk::Device device) {
-                    get().device = device;
+                    info->device = device;
                     return *this;
                 }
 
                 Builder& setType(ImageType type) {
-                    get().info.imageType = static_cast<vk::ImageType>(type);
+                    info->info.imageType = static_cast<vk::ImageType>(type);
                     return *this;
                 }
 
                 Builder& setFormat(vk::Format format) {
-                    get().info.format = format;
+                    info->info.format = format;
                     return *this;
                 }
 
                 Builder& setInitialLayout(vk::ImageLayout layout) {
-                    get().info.initialLayout = layout;
+                    info->info.initialLayout = layout;
                     return *this;
                 }
 
                 Builder& setSampling(vk::SampleCountFlagBits sampling) {
-                    get().samples = sampling;
+                    info->samples = sampling;
                     return *this;
                 }
 
-                Builder& setExtent(Nova::Core::Vec2 size, uint32_t depth = 1) {
-                    get().info.extent = vk::Extent3D{
-                        static_cast<uint32_t>(size.x()), 
-                        static_cast<uint32_t>(size.y()), 
+                Builder& setExtent(float w, float h, uint32_t depth = 1) {
+                    info->info.extent = vk::Extent3D{
+                        static_cast<uint32_t>(w),
+                        static_cast<uint32_t>(h),
                         depth
                     };
                     return *this;
+                }
+
+                Builder& setExtent(vec2 size, uint32_t depth = 1) {
+                    info->info.extent = vk::Extent3D{
+                        static_cast<uint32_t>(size[0]), 
+                        static_cast<uint32_t>(size[1]), 
+                        depth
+                    };
+                    return *this;
+                }
+
+                Image build() {
+                    Image result = *info;
+                    delete info;
+                    info = nullptr;
+                    return result;
                 }
         };
     };
@@ -124,26 +132,9 @@ namespace Nova::GE {
     using ImagePtr = std::shared_ptr<Image>;
 
     /**
-     * @class GfxEngine
-     * @brief Main class for NGE Graphics Engine
-     *
-     * 
-     * This class manages memory allocators, and other main graphics resources. 
-     *
-     * 
-     * Usage:
-     *    - Instantiate one GfxEngine per application instance
-     *    - Create createInfo either using internal builder, or manually
-     *    - Shutdown is managed manually by the Engine
-     *
-     * Responsibilities:
-     *    - Memory allocators
-     *    - Device creation
-     *    - Device manager
-     *    - Debugging utils
-     *
+     * @class Image
+     * @brief Image is a high level wrapper around Vk::Image and Vk::ImageView
      */
-    NOVA_LOG_DEF("Image");
     class Image {
         public:
             Image(CreateInfo::Image& createInfo) {
@@ -166,9 +157,9 @@ namespace Nova::GE {
 
         public:
             // Getters
-            NINTERNAL Nova::Core::Vec2& getExtent() { return extent; }
-            NINTERNAL Image *getThis() { return this; }
-            NINTERNAL VmaAllocation getAlloc() { return alloc; }
+            void getExtent(vec2 out) { glm_vec2_copy(extent, out); }
+            Image *getThis() { return this; }
+            VmaAllocation getAlloc() { return alloc; }
 
             
         private:
@@ -179,7 +170,7 @@ namespace Nova::GE {
             VmaAllocation alloc;
             vk::ImageCreateInfo info;
             
-            Nova::Core::Vec2 extent;
+            vec2 extent;
             VmaAllocator allocator;
             vk::Device device;
 

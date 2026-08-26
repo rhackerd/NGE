@@ -2,9 +2,7 @@
 
 #include "descMan.h"
 #include "types.h"
-#include "ubo.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/base.h>
 #include <vector>
 
 // TODO: modernize

@@ -1,0 +1,25 @@
+add_rules("mode.debug", "mode.release")
+
+add_requires("stb")
+add_requires("vulkan-headers")
+add_requires("vulkan-loader")
+add_requires("assimp")
+add_requires("fmt")
+add_requires("imgui", {configs = {sdl3 = true, vulkan = true}})
+
+target("NGE")
+    set_kind("static")
+    add_files("root/core/src/*.cpp")
+    add_includedirs("root/core/include", {public = true})
+    add_packages("vulkan-headers", {public = true})
+    add_packages("vulkan-loader", {public = true})
+    add_packages("assimp", {public = true})
+    add_packages("fmt", {public = true})
+    add_packages("stb", {public = true})
+    add_packages("imgui", {public = true})
+
+target("app")
+    set_kind("binary")
+    add_files("root/app/src/*.cpp")
+
+    add_deps("NGE")

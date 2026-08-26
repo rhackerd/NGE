@@ -2,7 +2,6 @@
 
 #include "core.h"
 #include "system.h"
-#include <Nova/Core/base.h>
 #include <string>
 #include "buffer.h"
 #include "types.h"

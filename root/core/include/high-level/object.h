@@ -8,7 +8,8 @@
 #include "sampledImage.h"
 #include "texture.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/structs.hpp>
+#include <cglm/mat4.h>
+
 namespace Nova::Graphics {
     class Object {
     public:
@@ -24,7 +25,7 @@ namespace Nova::Graphics {
             m_texture->init(path, *device, sampler->getSampler());
             sampler->Bind(*dMan, handle, *m_texture);
         }
-        NINTERNAL void init(GE::Device* device, VmaAllocator allocator, GE::DescriptorMan* dMan, GE::SetHandle& setHandle, GE::ImageSampler* sampler) {
+        void init(GE::Device* device, VmaAllocator allocator, GE::DescriptorMan* dMan, GE::SetHandle& setHandle, GE::ImageSampler* sampler) {
             this->device = device;
             this->allocator = allocator;
             this->dMan = dMan;
@@ -40,10 +41,10 @@ namespace Nova::Graphics {
 
 
         const Nova::GE::SetHandle getTexSet() const { return handle; }
-        Nova::GE::Mesh& getMesh()  { return m_mesh; }
-        const Nova::Core::Mat4&     getTransform()     const { return m_model; }
-        Nova::Core::Mat4&                        setTransform() {return m_model;}
-        GE::SetHandle& getHandle() { return handle; }
+        Nova::GE::Mesh&     getMesh()  { return m_mesh; }
+        void                getTransform(mat4 out)  { glm_mat4_copy(m_model, out); }
+        void                setTransform(mat4 in)   { glm_mat4_copy(in, m_model); }
+        GE::SetHandle&      getHandle() { return handle; }
 
         void shutdown() {
             m_mesh.shutdown();
@@ -60,7 +61,7 @@ namespace Nova::Graphics {
 
         Nova::GE::Mesh m_mesh;
         Nova::GE::ref<Nova::GE::Texture> m_texture;
-        Nova::Core::Mat4 m_model;
+        mat4 m_model = GLM_MAT4_IDENTITY_INIT;
         Nova::GE::ImageSampler* sampler;
     };
 };

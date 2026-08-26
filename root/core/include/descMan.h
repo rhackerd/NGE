@@ -2,16 +2,14 @@
 
 #include "core.h"
 #include "system.h"
-#include "uniformBuffer.h"
+#include "types.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/macros.h>
 #include <SDL3/SDL_log.h>
 #include <cassert>
 #include <mutex>
 #include <unordered_map>
 #include <vector>
 #include <vulkan/vulkan.hpp>
-#include <vulkan/vulkan_core.h>
 #include <unordered_set>
 
 // TODO: modernize
@@ -71,7 +69,7 @@ namespace Nova::GE {
 
         u32 allocateTextureSlot() {
             std::lock_guard lock(m_textureMutex);
-            if (m_freeTextureSlots.empty()) NERROR("bindless texture array exhausted");
+            if (m_freeTextureSlots.empty()) printf("DescMan allocateTextureSlot(): error, no empty free slots\n");
             u32 slot = m_freeTextureSlots.back();
             m_freeTextureSlots.pop_back();
             return slot;
@@ -138,7 +136,5 @@ namespace Nova::GE {
         u32 m_textureCapacity = 0;
         std::vector<u32> m_freeTextureSlots;
         std::mutex m_textureMutex;
-
-        NOVA_LOG_DEF("Descriptor");
     };
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "system.h"
-#include <Nova/Core/base.h>
 #include <vulkan/vulkan_core.h>
 #include <cassert>
 
@@ -27,12 +26,16 @@ namespace Nova::GE {
             class Builder;
         };
 
-        class Buffer::Builder : Nova::Core::Base::Builder<Buffer> {
+        class Buffer::Builder {
+            private: Buffer* info;
             public:
-                Builder& setAllocator(VmaAllocator allocator) { get().allocator = allocator; return *this; }
-                Builder& setSize(vk::DeviceSize size) { get().size = size; return *this; }
-                Builder& setUsage(vk::BufferUsageFlags usage) { get().usage = usage; return *this; }
-                Builder& setMemUsage(VmaMemoryUsage memUsage) { get().memUsage = memUsage; return *this; }
+                Builder() {
+                    info = new Buffer();
+                }
+                Builder& setAllocator(VmaAllocator allocator) { info->allocator = allocator; return *this; }
+                Builder& setSize(vk::DeviceSize size) { info->size = size; return *this; }
+                Builder& setUsage(vk::BufferUsageFlags usage) { info->usage = usage; return *this; }
+                Builder& setMemUsage(VmaMemoryUsage memUsage) { info->memUsage = memUsage; return *this; }
 
                 // presets
                 Builder& asVertex() { return setUsage(vk::BufferUsageFlagBits::eVertexBuffer).setMemUsage(VMA_MEMORY_USAGE_CPU_TO_GPU); }
@@ -45,7 +48,12 @@ namespace Nova::GE {
                 }
                 Builder& asStaging(){ return setUsage(vk::BufferUsageFlagBits::eTransferSrc).setMemUsage(VMA_MEMORY_USAGE_CPU_TO_GPU);  }
 
-                Buffer build() { return get(); }
+                Buffer build() {
+                    Buffer result = *info;
+                    delete info;
+                    info = nullptr;
+                    return result;
+                }
         };
     };
 

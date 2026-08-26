@@ -9,15 +9,13 @@
 #include "swapchain.h"
 #include "types.h"
 #include "vulkan/vulkan.hpp"
-#include "Nova/Core/core.h"
-#include "Nova/Core/base.h"
 #include <array>
 #include <cglm/types.h>
+#include <cglm/vec3.h>
 #include <functional>
 #include <pthread.h>
 #include <vector>
 #include "device.h"
-#include "texture.h"
 
 // TODO: modernize
 // ========================================
@@ -44,13 +42,19 @@ namespace Nova::GE::Render {
             class Builder;
         };
 
-        class CPUF::Builder : Nova::Core::Base::Builder<CPUF> {
+        class CPUF::Builder {
+            private: CPUF* info;
             public:
-                Builder() { get().secondaryCount = 8; }
-                Builder& setSecondaryCount(u32 count)   { get().secondaryCount = count; return *this; }
-                Builder& setDevice(Device& device)      { get().device = &device;       return *this; }
-                Builder& setNumPools(u16 num)           { get().numPools = num;         return *this; }
-                CPUF build() { return get(); }
+                Builder() { info->secondaryCount = 8; }
+                Builder& setSecondaryCount(u32 count)   { info->secondaryCount = count; return *this; }
+                Builder& setDevice(Device& device)      { info->device = &device;       return *this; }
+                Builder& setNumPools(u16 num)           { info->numPools = num;         return *this; }
+                CPUF build() {
+                    CPUF result = *info;
+                    delete info;
+                    info = nullptr;
+                    return result;
+                }
             };
     }
 
@@ -111,11 +115,11 @@ namespace Nova::GE::Render {
                 vk::Offset2D(0, 0), 
                 vk::Extent2D(extent.width, extent.height)));  // uint32_t, no cast
         }
-        void dynamicRendering(Nova::Core::Vec3 color,vk::RenderingAttachmentInfo info = {}) {
+        void dynamicRendering(vec3 color,vk::RenderingAttachmentInfo info = {}) {
             if (info.imageView) {
                 
             }
-            if (color) info.setClearValue(vk::ClearColorValue{std::array<float, 4>{color.x(), color.y(), color.z(), 1.0f}});
+            if (color) info.setClearValue(vk::ClearColorValue{std::array<float, 4>{color[0], color[1], color[2], 1.0f}});
         };
 
         void drawMesh(Mesh& mesh) {
@@ -153,7 +157,7 @@ namespace Nova::GE::Render {
             _bindSet(set.setIndex, set, this->layout);
         }
 
-        void pushConstant(const Nova::Core::Mat4& mat, vk::PipelineLayout layout) {
+        void pushConstant(mat4& mat, vk::PipelineLayout layout) {
             m_cb.pushConstants(layout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(mat4), &mat);
         };
 
@@ -172,7 +176,7 @@ namespace Nova::GE::Render {
         vk::Image       image;
         vk::ImageView    view;
         vk::Format       format;   // needed for inheritance info
-        Nova::Core::Vec2 extent;
+        vec2            extent;
         vk::Image msImage;
 
         vk::Image depthImage;
@@ -212,7 +216,9 @@ namespace Nova::GE::Render {
     inline void updateRenderTarget(RenderTarget& t) {
         t.image  = t.swapchain->getCurrentImage();
         t.view   = t.swapchain->getCurrentImageView();
-        t.extent = {(float)t.swapchain->getExtent().width, (float)t.swapchain->getExtent().height};
+        // t.extent = {(float)t.swapchain->getExtent().width, (float)t.swapchain->getExtent().height};
+        t.extent[0] = t.swapchain->getExtent().width;
+        t.extent[1] = t.swapchain->getExtent().height;
         t.depthImage = t.swapchain->getCurrentDepthImage();
         t.depthView = t.swapchain->getCurrentDepthImageView();
         t.msView = t.swapchain->getCurrentMSColorImageView();
@@ -237,7 +243,7 @@ namespace Nova::GE::Render {
         // inUse = false once GPU is done (after fence signal).
         CBSlot*  batchSubmit(RenderTarget& target, std::vector<std::function<void(Cmd)>> fns, std::function<void(vk::CommandBuffer)> after);
 
-        void     setClearColor(Nova::Core::Vec3 color) { m_clearColor = color; }
+        void     setClearColor(vec3 color) { glm_vec3_copy(color, m_clearColor); }
 
         Cmd acquireSecondary(u32 poolIndex, u32 slotIndex, const vk::CommandBufferInheritanceInfo& inheritance);
         void releaseSecondary(Cmd& cmd);
@@ -250,7 +256,7 @@ namespace Nova::GE::Render {
         u8 poolCount() const { return static_cast<u32>(m_pools.size()); }
 
     private:
-        Nova::Core::Vec3                    m_clearColor = { 0.0f, 0.0f, 0.0f };
+        vec3                                m_clearColor = { 0.0f, 0.0f, 0.0f };
         Device*                             m_device = nullptr;
         std::vector<CBSlot>                 m_cmds;   // primaries
         std::vector<ref<CommandBuffer>>     m_sCmds;  // secondaries

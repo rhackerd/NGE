@@ -1,7 +1,6 @@
 #pragma once
 #include "vulkan/vulkan.hpp"
-#include <Nova/Core/structs.hpp>
-#include <array>
+#include <cglm/types.h>
 #include <cstddef>
 #include <memory>
 #include <string>
@@ -61,9 +60,9 @@ namespace Nova::GE {
 
 
     struct Vertex {
-        Nova::Core::Vec3 pos;
-        Nova::Core::Vec3 normal;
-        Nova::Core::Vec2 uv;
+        vec3 pos;
+        vec3 normal;
+        vec3 uv;
 
         static vk::VertexInputBindingDescription binding() {
             return {0, sizeof(Vertex), vk::VertexInputRate::eVertex};

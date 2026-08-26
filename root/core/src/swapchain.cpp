@@ -3,16 +3,16 @@
 #include "core.h"
 #include "vulkan/vulkan.hpp"
 #include "SDL3/SDL.h"
-#include <Nova/Core/macros.h>
+#include <SDL3/SDL_hidapi.h>
 #include <SDL3/SDL_video.h>
+#include <cglm/vec2.h>
 #include <cstdint>
 #include <vulkan/vulkan_core.h>
 #include <vulkan/vulkan_to_string.hpp>
+#include <vulkan/vulkan.hpp>
+#include <algorithm>
 
 namespace Nova::GE {
-
-    #include <vulkan/vulkan.hpp>
-#include <algorithm>
 
     vk::SampleCountFlagBits clampToSupported(vk::SampleCountFlagBits requestedSamples, vk::SampleCountFlags supported) {
         if (supported & requestedSamples) {
@@ -40,19 +40,19 @@ namespace Nova::GE {
         window = createInfo.window;
         m_createInfo = createInfo;
 
-        NOVA_SUPPRESS_INTERNAL_BEGIN
         vk::SurfaceCapabilities2KHR caps = device->getPhysicalDevice()
-            .getSurfaceCapabilities2KHR(window->getSurface(), device->getDld());
+            .getSurfaceCapabilities2KHR(createInfo.surface, device->getDld());
         auto& surfaceCaps = caps.surfaceCapabilities;
         if (surfaceCaps.currentExtent.width != UINT32_MAX) {
-            extent = { (float)surfaceCaps.currentExtent.width, (float)surfaceCaps.currentExtent.height };
+            extent[0] = surfaceCaps.currentExtent.width;
+            extent[1] = surfaceCaps.currentExtent.height;
+            
         }else {
             int width, height;
-            SDL_GetWindowSize(&window->get(), &width, &height); // This should be later integrated to Nova Desktop
-            extent = { (float)width, (float)height };
+            SDL_GetWindowSize(window, &width, &height); // This should be later integrated to Nova Desktop
+            extent[0] = width;
+            extent[1] = height;
         }
-        
-        NOVA_SUPPRESS_INTERNAL_END
 
         vk::SampleCountFlags Csupported = device->getPhysicalDevice().getProperties().limits.framebufferColorSampleCounts;
         vk::SampleCountFlags Dsupported = device->getPhysicalDevice().getProperties().limits.framebufferDepthSampleCounts;
@@ -63,12 +63,11 @@ namespace Nova::GE {
         vk::SurfaceFormat2KHR surfaceFormat = chooseFormat();
         m_format = surfaceFormat.surfaceFormat.format;
         vk::PresentModeKHR pMode = choosePresentMode();
-        extent = createInfo.extent;
-
+        glm_vec2_copy(createInfo.extent, extent);
 
         imageCount = chooseOptimalImgCount();
         vk::SwapchainCreateInfoKHR aci{};
-        aci.setSurface(window->getSurface())
+        aci.setSurface(createInfo.surface)
         .setMinImageCount(imageCount)
         .setImageFormat(m_format)            // FIX
         .setImageColorSpace(surfaceFormat.surfaceFormat.colorSpace)
@@ -148,7 +147,7 @@ namespace Nova::GE {
 
             imageViews[i] = device->getDevice().createImageView(ci, nullptr, device->getDld());      
         }
-        NINFO("Color buffer is ready.");
+        printf("swapchain setupColorBuffer(): color buffer is ready\n");
     };
 
     void Swapchain::setupDepthBuffer() {
@@ -171,7 +170,8 @@ namespace Nova::GE {
         if (format == vk::Format::eUndefined)
             throw std::runtime_error("No depth format found!");
         
-        NINFO("Depth format: {}", vk::to_string(format));
+        // NINFO("Depth format: {}", vk::to_string(format));
+        printf("swapchain setupDepthBuffer(): depth format %s\n", vk::to_string(format).c_str());
         m_depthFormat = format;
 
         // now get image count
@@ -180,7 +180,7 @@ namespace Nova::GE {
         m_depthImagesViews.resize(images.size());
         m_depthAllocations.resize(images.size());
 
-        NINFO("Making depth buffer");
+        // NINFO("Making depth buffer");
         for (size_t i = 0; i < images.size(); i++) {
             Nova::GE::CreateInfo::Image imageCI = Nova::GE::CreateInfo::Image::Builder()
                 .setExtent(extent)
@@ -200,7 +200,8 @@ namespace Nova::GE {
             m_depthImagesViews[i] = image->resolve(view);
         }
 
-        NINFO("Made {} depth images successfully", images.size());
+        // NINFO("Made {} depth images successfully", images.size());
+        printf("swapchain setupDepthBuffer(): made %zu depth images successfully\n", images.size());
     };
 
     bool Swapchain::advanceFrame() {
@@ -219,19 +220,19 @@ namespace Nova::GE {
         // Handle special cases
         if (res == vk::Result::eErrorOutOfDateKHR || res == vk::Result::eSuboptimalKHR) {
             // Swapchain needs recreation (window resized, etc.)
-            NINFO("Swapchain out of date, needs recreation");
             handleRecreation();
             return false;
         }
         
         if (res != vk::Result::eSuccess) {
-            NERROR("Failed to acquire swapchain image: {}", vk::to_string(res));
+            printf("swapchain advanceFrame(): failed ti acquire swapchain image %s", vk::to_string(res).c_str());
             return false;
         }
         // print res every 10 or 20 frames
         static int frameCount = 0;
         if (frameCount % 10 == 0 && res != vk::Result::eSuccess) {
-            NINFO("Acquired swapchain image {}", vk::to_string(res));
+            // NINFO("Acquired swapchain image {}", vk::to_string(res));
+            printf("swapchain advanceFrame(): acquire swapchain image %s", vk::to_string(res).c_str());
         }
         frameCount++;
         
@@ -240,25 +241,28 @@ namespace Nova::GE {
 
     void Swapchain::handleRecreation() {
         int w, h;
-        SDL_GetWindowSizeInPixels(&window->get(), &w, &h);
+        SDL_GetWindowSizeInPixels(window, &w, &h);
         while (w == 0 || h == 0) { // handle minimization
-            SDL_GetWindowSizeInPixels(&window->get(), &w, &h);
+            SDL_GetWindowSizeInPixels(window, &w, &h);
             SDL_WaitEvent(nullptr);
         }
 
         vkDeviceWaitIdle(device->getDevice());
         shutdown();
 
-        m_createInfo.extent = {static_cast<float>(w), static_cast<float>(h)}; // update extent
+        m_createInfo.extent[0] = w;
+        m_createInfo.extent[1] = h;
         init(m_createInfo);           // FIX: use stored createInfo
-        extent = {static_cast<float>(w), static_cast<float>(h)};
+        extent[0] = w;
+        extent[1] = h;
     }
 
     void Swapchain::setupMSColorBuffer() {
         m_msColorImagePtrs.clear();
         m_msColorImageViews.resize(images.size());
 
-        NINFO("Making MSAA color buffer @ {} samples", vk::to_string(m_sampleCount));
+        // NINFO("Making MSAA color buffer @ {} samples", vk::to_string(m_sampleCount));
+        printf("swapchain setupMSColorBuffer(): making MSAA color buffer @ %zu samples", m_sampleCount);
         for (size_t i = 0; i < images.size(); i++) {
             Nova::GE::CreateInfo::Image imageCI = Nova::GE::CreateInfo::Image::Builder()
                 .setExtent(extent)
@@ -276,6 +280,7 @@ namespace Nova::GE {
             ImageViewHandle view = image.lock()->createView(vk::ImageAspectFlagBits::eColor);
             m_msColorImageViews[i] = image.lock()->resolve(view);
         }
-        NINFO("Made {} MSAA color Images sucessfully", images.size());
+        // NINFO("Made {} MSAA color Images sucessfully", images.size());
+        printf("swapchain setupMSColorBuffer(): made %zu MSAA color images successfully", images.size());
     }
 };

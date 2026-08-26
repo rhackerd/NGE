@@ -2,6 +2,7 @@
 #include "buffer.h"
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <cglm/vec3.h>
 #include <vector>
 namespace Nova::GE {
     bool Mesh::init(const std::string& path, VmaAllocator allocator) {
@@ -16,6 +17,7 @@ namespace Nova::GE {
         );
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            printf("Mesh init(): failed to load '%s': %s\n", path.c_str(), importer.GetErrorString());
             return false;
         }
 
@@ -27,7 +29,7 @@ namespace Nova::GE {
         m_indexCount = static_cast<u32>(indices.size());
 
         //
-        // Upload vertex buffer
+        // Upload vertex bufferP
         //
 
         auto vertCI = CreateInfo::Buffer::Builder()
@@ -79,25 +81,19 @@ namespace Nova::GE {
         for (uint32_t i = 0; i < mesh->mNumVertices; i++) {
             Vertex v{};
 
-            v.pos = {
-                mesh->mVertices[i].x,
-                mesh->mVertices[i].y,
-                mesh->mVertices[i].z
-            };
+            v.pos[0] = mesh->mVertices[i].x;
+            v.pos[1] = mesh->mVertices[i].y;
+            v.pos[2] = mesh->mVertices[i].z;
 
             if (mesh->HasNormals()) {
-                v.normal = {
-                    mesh->mNormals[i].x,
-                    mesh->mNormals[i].y,
-                    mesh->mNormals[i].z
-                };
+                v.normal[0] = mesh->mNormals[i].x;
+                v.normal[1] = mesh->mNormals[i].y;
+                v.normal[2] = mesh->mNormals[i].z;
             }
 
             if (mesh->mTextureCoords[0]) {
-                v.uv = {
-                    mesh->mTextureCoords[0][i].x,
-                    mesh->mTextureCoords[0][i].y
-                };
+                v.uv[0] = mesh->mTextureCoords[0][i].x;
+                v.uv[1] = mesh->mTextureCoords[0][i].y;
             }
 
             vertices.push_back(v);

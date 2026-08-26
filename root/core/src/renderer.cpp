@@ -23,7 +23,7 @@ namespace Nova::Graphics {
         auto texSetLayout    = texSet.bake(m_device->getDevice(), m_device->getDld(), 1);
 
         Nova::GE::ShaderLayout shaderLayout;
-        shaderLayout.addPushConstant(sizeof(Nova::Core::Mat4), vk::ShaderStageFlagBits::eVertex);
+        shaderLayout.addPushConstant(sizeof(mat4), vk::ShaderStageFlagBits::eVertex);
         auto bakedLayout = shaderLayout.bake({cameraSetLayout, texSetLayout});
 
         // Then pipeline
@@ -60,7 +60,8 @@ namespace Nova::Graphics {
         Nova::GE::Render::CreateInfo::CPUF cpufCI{};
         cpufCI.device = m_device;
         m_cpuf.init(cpufCI);
-        m_cpuf.setClearColor({0.1f, 0.1f, 0.1f});
+        vec3 color = {0.1f, 0.1f, 0.1f};
+        m_cpuf.setClearColor(color);
 
         m_renderTarget = Nova::GE::Render::createRenderTarget(graphics.getSwapchain());
         m_lastSlot = nullptr;
@@ -113,7 +114,9 @@ namespace Nova::Graphics {
                     
                     auto& texSet = obj->getTexSet();
                     cmd.bindSet(texSet);
-                    cmd.pushConstant(obj->getTransform(), m_pipelineLayout);
+                    mat4 out;
+                    obj->getTransform(out);
+                    cmd.pushConstant(out, m_pipelineLayout);
                     cmd.drawMesh(obj->getMesh());
                 }
             }

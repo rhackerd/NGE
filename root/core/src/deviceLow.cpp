@@ -1,9 +1,5 @@
-#include "core.h"
 #include "device.h"
-#include "vulkan/vulkan.hpp"
-#include <Nova/Core/core.h>
 #include <set>
-#include <vector>
 
 namespace Nova::GE {
     void Device::setupQueues() {
@@ -14,13 +10,13 @@ namespace Nova::GE {
             mTransferQueue = mLogicalDevice.getQueue(indices.transferFamily.value(), 0, dld);
         }else {
             mTransferQueue = mGraphicsQueue;
-            NOVA_INFO(*log, "No dedicated transfer queue, using graphics queue");
+            // NOVA_INFO(*log, "No dedicated transfer queue, using graphics queue");
+            printf("device setupQueues(): no dedicated transfer queue, using graphics queue\n");
         }
-        NOVA_INFO(*log, "Queues are ready for execution!");
     }
 
     void Device::FillFamilyIndices(std::optional<vk::SurfaceKHR> surface) {
-        NOVA_INFO(*log, "Gathering Queue Family Properties");
+        // NOVA_INFO(*log, "Gathering Queue Family Properties");
         
         const auto queueFamilyProperties = mPhysicalDevice.getQueueFamilyProperties();
         
@@ -36,7 +32,7 @@ namespace Nova::GE {
             if (!indices.graphicsFamily.has_value() && 
                 (queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)) {
                 indices.graphicsFamily = i;
-                NOVA_INFO(*log, "Found Graphics Queue at family {}", i);
+                printf("device FillFamilyIndices(): Found Graphics Queue at family %i\n", i);
             }
 
             // Present Queue
@@ -44,7 +40,8 @@ namespace Nova::GE {
                 VkBool32 presentSupport = mPhysicalDevice.getSurfaceSupportKHR(i, surface.value(), system->getDld());
                 if (presentSupport) {
                     indices.presentFamily = i;
-                    NOVA_INFO(*log, "Found Present Queue at family {}", i);
+                    // NOVA_INFO(*log, "Found Present Queue at family {}", i);
+                    printf("device FillFamilyIndices(): Found present queue at family %i\n", i);
                 }
             }
 
@@ -53,26 +50,31 @@ namespace Nova::GE {
                 (queueFamily.queueFlags & vk::QueueFlagBits::eTransfer) &&
                 !(queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)) {
                 indices.transferFamily = i;
-                NOVA_INFO(*log, "Found dedicated Transfer Queue at family {}", i);
+                // NOVA_INFO(*log, "Found dedicated Transfer Queue at family {}", i);
+                printf("device FillFamilyIndices(): Found dedicated transfer Queue at family %i \n", i);
             }
         }
 
         // Fallback: use graphics queue for transfer if no dedicated queue
         if (!indices.transferFamily.has_value() && indices.graphicsFamily.has_value()) {
             indices.transferFamily = indices.graphicsFamily.value();
-            NOVA_INFO(*log, "Using Graphics Queue for transfers (fallback)");
+            // NOVA_INFO(*log, "Using Graphics Queue for transfers (fallback)");
+            printf("device FillFamilyIndices(): Using graphics queue for transfers\n");
         }
 
         // Fallback: use graphics queue for present if no dedicated present queue
         if (surface.has_value() && !indices.presentFamily.has_value() && indices.graphicsFamily.has_value()) {
             indices.presentFamily = indices.graphicsFamily.value();
-            NOVA_INFO(*log, "Using Graphics Queue for presentation (fallback)");
+            // NOVA_INFO(*log, "Using Graphics Queue for presentation (fallback)");
+            printf("device FillFamilyIndices(): using graphics queue for presentation\n");
         }
 
         if (indices.isComplete()) {
-            NOVA_INFO(*log, "Found all required queues");
+            // NOVA_INFO(*log, "Found all required queues");
+            printf("device FillFamilyIndices(): Found all requires queues\n");
         } else {
-            NOVA_ERROR(*log, "Failed to find all required queue families!");
+            // NOVA_ERROR(*log, "Failed to find all required queue families!");
+            printf("device FillFamilyIndices(): Failed to find all required families!\n");
         }
     }
 
@@ -96,44 +98,45 @@ namespace Nova::GE {
     }
 
     void Device::printGPUInfo(std::vector<const char*> ext) {
+        printf("printGPUInfo: not implemented\n");
+        return;
+        // Version version;
 
-        Version version;
+        // vk::PhysicalDeviceProperties2 deviceProperties = mPhysicalDevice.getProperties2(system->getDld());
+        // printf(*log, " ├▶ GPU Name: {}", static_cast<std::string>(deviceProperties.properties.deviceName));
+        // NOVA_INFO(*log, " ├▶ GPU Vendor: {}", static_cast<int>(deviceProperties.properties.vendorID));
+        // std::string type;
+        // switch (deviceProperties.properties.deviceType) {
+        //     case vk::PhysicalDeviceType::eDiscreteGpu:
+        //         type = "Discrete";
+        //         break;
+        //     case vk::PhysicalDeviceType::eIntegratedGpu:
+        //         type = "Integrated";
+        //         break;
+        //     case vk::PhysicalDeviceType::eVirtualGpu:
+        //         type = "Virtual";
+        //         break;
+        //     case vk::PhysicalDeviceType::eCpu:
+        //         type = "CPU";
+        //         break;
+        //     default:
+        //         type = "Unknown";
+        //         break;
+        // }
+        // NOVA_INFO(*log, " ├▶ GPU Type: {}", type);
+        // std::string apiVersion = fmt::format("{}.{}", VK_VERSION_MAJOR(deviceProperties.properties.apiVersion), VK_VERSION_MINOR(deviceProperties.properties.apiVersion));
+        // if (VK_VERSION_PATCH(deviceProperties.properties.apiVersion) > 0) {
+        //     apiVersion += fmt::format(".{}", VK_VERSION_PATCH(deviceProperties.properties.apiVersion));
+        // }
+        // version = GetVersion(deviceProperties.properties.apiVersion);
+        // NOVA_INFO(*log, " ├▶ GPU API Version: {}.{}.{}", version.major, version.minor, version.patch);
 
-        vk::PhysicalDeviceProperties2 deviceProperties = mPhysicalDevice.getProperties2(system->getDld());
-        NOVA_INFO(*log, " ├▶ GPU Name: {}", static_cast<std::string>(deviceProperties.properties.deviceName));
-        NOVA_INFO(*log, " ├▶ GPU Vendor: {}", static_cast<int>(deviceProperties.properties.vendorID));
-        std::string type;
-        switch (deviceProperties.properties.deviceType) {
-            case vk::PhysicalDeviceType::eDiscreteGpu:
-                type = "Discrete";
-                break;
-            case vk::PhysicalDeviceType::eIntegratedGpu:
-                type = "Integrated";
-                break;
-            case vk::PhysicalDeviceType::eVirtualGpu:
-                type = "Virtual";
-                break;
-            case vk::PhysicalDeviceType::eCpu:
-                type = "CPU";
-                break;
-            default:
-                type = "Unknown";
-                break;
-        }
-        NOVA_INFO(*log, " ├▶ GPU Type: {}", type);
-        std::string apiVersion = fmt::format("{}.{}", VK_VERSION_MAJOR(deviceProperties.properties.apiVersion), VK_VERSION_MINOR(deviceProperties.properties.apiVersion));
-        if (VK_VERSION_PATCH(deviceProperties.properties.apiVersion) > 0) {
-            apiVersion += fmt::format(".{}", VK_VERSION_PATCH(deviceProperties.properties.apiVersion));
-        }
-        version = GetVersion(deviceProperties.properties.apiVersion);
-        NOVA_INFO(*log, " ├▶ GPU API Version: {}.{}.{}", version.major, version.minor, version.patch);
-
-        NOVA_INFO(*log, " └▶ Extensions: ");
-        if (ext.size() == 0) NOVA_INFO(*log, "  └─➤ None");
-        for (const char* extension : ext) {
-            if (extension != ext.back()) NOVA_INFO(*log, "  ├─➤ {}", extension);
-            NOVA_INFO(*log, "  └─➤ {}", extension);
-        }
+        // NOVA_INFO(*log, " └▶ Extensions: ");
+        // if (ext.size() == 0) NOVA_INFO(*log, "  └─➤ None");
+        // for (const char* extension : ext) {
+        //     if (extension != ext.back()) NOVA_INFO(*log, "  ├─➤ {}", extension);
+        //     NOVA_INFO(*log, "  └─➤ {}", extension);
+        // }
     };
 
     

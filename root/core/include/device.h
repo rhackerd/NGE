@@ -2,50 +2,22 @@
 
 
 #include "Image.h"
+#include "buffer.h"
 #include "commandBuffer.h"
 #include "core.h"
-#include "descMan.h"
 #include "descMan.h"
 #include "pipeline.h"
 #include "system.h"
 #include "uniformBuffer.h"
 #include "vulkan/vulkan.hpp"
-#include <Nova/Desktop/core.h>
-#include <any>
-#include <memory>
+#include <fmt/format.h>
 #include <optional>
-#include <source_location>
 #include <stdexcept>
-#include <typeindex>
-#include <unordered_map>
 #include <vulkan/vulkan_core.h>
-#pragma once
 #include <vector>
 #include <vulkan/vulkan.hpp>
-#include <Nova/Core/core.h>
 #include <vk_mem_alloc.h>
 #include "shader.h"
-#include <Nova/Core/macros.h>
-
-// TODO: modernize
-// ========================================
-// Metadata
-//
-// State    : #legacy@nge3
-// Origin   : @nge2
-//
-// Desc     : Overall per device manger
-// Info     : This file only works, does not look good and is very bad, maybe full rewrite and a PR of itself.
-// ========================================
-
-namespace Nova::Core {
-    [[noreturn]] inline void assertFail(const char* type, const char* msg, 
-                                         std::source_location loc = std::source_location::current()) {
-        // use your existing logger or just stderr
-        fprintf(stderr, "[%s] %s — %s:%d\n", type, msg, loc.file_name(), loc.line());
-        std::abort();
-    }
-}
 
 namespace Nova::GE {
     struct DeviceCaps {
@@ -181,7 +153,7 @@ namespace Nova::GE {
             case vk::Format::eR16Unorm:        return 2;
             // add as needed
             default:
-                NOVA_PANIC("Unknown format size"); // your assert system
+                printf("device getFormatSize(): unknown format size");
                 return 0;
         }
     }
@@ -243,7 +215,7 @@ namespace Nova::GE {
             [[nodiscard]]
             weakRef<UniformBuffer> createUniformBuffer(CreateInfo::UniformBuffer createInfo) {
                 auto buffer = makeRef<UniformBuffer>(mLogicalDevice, createInfo, mAllocator);
-                NOVA_INFO(*log, "Made a uniform buffer");
+                // NOVA_INFO(*log, "Made a uniform buffer");
                 return buffer;
             }
 
@@ -279,14 +251,14 @@ namespace Nova::GE {
             // }
 
         public:
-            NINTERNAL vk::Device getDevice() { return mLogicalDevice; };
-            NINTERNAL vk::PhysicalDevice getPhysicalDevice() { return mPhysicalDevice; };
-            NINTERNAL vk::Queue getGraphicsQueue() { return mGraphicsQueue; };
-            NINTERNAL vk::Queue getPresentQueue() { return mPresentQueue; };
-            NINTERNAL vk::Queue getTransferQueue() { return mTransferQueue; };
-            NINTERNAL vk::detail::DispatchLoaderDynamic& getDld() { return dld; };
-            NINTERNAL QueueFamilyIndices& getIndices() {return indices;};
-            NINTERNAL VmaAllocator& getAllocator() { return mAllocator; };
+            vk::Device getDevice() { return mLogicalDevice; };
+            vk::PhysicalDevice getPhysicalDevice() { return mPhysicalDevice; };
+            vk::Queue getGraphicsQueue() { return mGraphicsQueue; };
+            vk::Queue getPresentQueue() { return mPresentQueue; };
+            vk::Queue getTransferQueue() { return mTransferQueue; };
+            vk::detail::DispatchLoaderDynamic& getDld() { return dld; };
+            QueueFamilyIndices& getIndices() {return indices;};
+            VmaAllocator& getAllocator() { return mAllocator; };
             usize getUBOSize() { return uboDescsSize; }
             usize getSSBOSize() { return ssboDescSize; }
             usize getSamplerSize() { return samplerDescSize; }
@@ -326,9 +298,8 @@ namespace Nova::GE {
             // TODO: Remove global CmdPool, should be managed by CPUF.h
             vk::CommandPool commandPool = VK_NULL_HANDLE;
 
-            // TODO: Duplicate Logger
-            NOVA_LOG_DEF("Device");
-            std::unique_ptr<Nova::Core::Logger> log;
+            // std::unique_ptr<Nova::Core::Logger> log;
+            u16 devId = 0;
 
             Nova::GE::DescriptorMan descriptorManager;
 

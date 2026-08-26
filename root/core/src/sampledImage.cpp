@@ -11,7 +11,7 @@ namespace Nova::GE {
             .setAllocator(&device.getAllocator())
             .setDevice(device.getDevice())
             .setFormat(format)
-            .setExtent({(float)width, (float) height})
+            .setExtent(width,height)
             .build();
         imageCI.info.setUsage(usage);
         imageCI.info.setImageType(vk::ImageType::e2D);

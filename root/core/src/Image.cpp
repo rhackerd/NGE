@@ -3,6 +3,7 @@
 #include "vulkan/vulkan.hpp"
 #include <memory>
 #include <vulkan/vulkan_core.h>
+#include <vulkan/vulkan_to_string.hpp>
 
 namespace Nova::GE {
     bool Image::init(CreateInfo::Image& createInfo) {
@@ -12,16 +13,17 @@ namespace Nova::GE {
 
         vk::ImageCreateInfo info = createInfo.info;
 
-        if (info.imageType == vk::ImageType::e1D) NINFO("1D images are uncommon, are you sure you want to use them?");
         if (info.format == vk::Format::eUndefined) 
         {
             info.format = vk::Format::eR8G8B8A8Unorm;
-            NINFO("Image format is undefined, using R8G8B8A8Unorm");
+            // NINFO("Image format is undefined, using R8G8B8A8Unorm");
+            printf("image init(): format is undefined, using R8G8B8A8Unorm\n");
         }
         if (info.extent.width == 0 || info.extent.height == 0 || info.extent.depth == 0) 
         {
             info.extent = vk::Extent3D{100, 100, 1};
-            NINFO("Image extent is undefined, using 100x100x1");
+            // NINFO("Image extent is undefined, using 100x100x1");
+            printf("image init(): extent is undefined, using 100x100x1\n");
         }
         if (info.mipLevels == 0) info.mipLevels = 1;
         if (info.arrayLayers == 0) info.arrayLayers = 1;
@@ -37,12 +39,15 @@ namespace Nova::GE {
         VkResult result = vmaCreateImage(allocator, &static_cast<const VkImageCreateInfo&>(info), &allocInfo, &_image, &alloc, nullptr);
 
         if (result != VK_SUCCESS) {
-            NERROR("Failed to create image");
+            // NERROR("Failed to create image");
+            fprintf(stderr, "image init(): failed to create image\n");
             return false;
         }
 
         format = info.format;
-        extent = {static_cast<float>(info.extent.width), static_cast<float>(info.extent.height)};
+        // extent = {static_cast<float>(info.extent.width), static_cast<float>(info.extent.height)};
+        extent[0] = info.extent.width;
+        extent[1] = info.extent.height;
         this->info = info;
 
         image = vk::Image(_image);
