@@ -1,7 +1,18 @@
 {
     packages = {
-        "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6",
-        "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38",
-        "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845"
+        "/home/fedora/.xmake/packages/s/stb/2026.03.18/620c927292e84953b864706d39cf4a30",
+        "/home/fedora/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6",
+        "/home/fedora/.xmake/packages/v/vulkan-headers/1.4.335+0/a1c87328203147cfa4c5272cf78b6d5b",
+        "/home/fedora/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20",
+        "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38",
+        "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8",
+        "/home/fedora/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293",
+        "/home/fedora/.xmake/packages/m/minizip/v1.3.2/0ff7531875cc4695af8b3df658348c6e",
+        "/home/fedora/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03",
+        "/home/fedora/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff",
+        "/home/fedora/.xmake/packages/l/libxss/1.2.5/6e52e0599a424dcc854461f97a4008c3",
+        "/home/fedora/.xmake/packages/w/wayland/1.25.0/b48a347d57a940749b5f3611ec88e675",
+        "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845",
+        "/home/fedora/.xmake/packages/c/cglm/v0.9.6/e4e478c35c554e10ba5ec0f3cdb90e31"
     }
 }

@@ -1,239 +1,244 @@
 {
-    fmt = {
-        links = "fmt",
-        libfiles = {
-            "/usr/lib/libfmt-c.a",
-            "/usr/lib/libfmt.so"
-        },
-        __requirestr = "fmt",
-        static = true,
-        __enabled = true,
-        envs = {
-            PATH = {
-                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
-            }
-        },
-        version = "12.2.0",
-        shared = true
-    },
     ["vulkan-headers"] = {
-        version = "1.4.357.0",
-        envs = {
-            PATH = {
-                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
-            }
-        },
         __requirestr = "vulkan-headers",
-        __enabled = true
-    },
-    assimp = {
-        links = {
-            "assimp",
-            "minizip",
-            "z"
-        },
-        libfiles = {
-            "/usr/lib/libassimp.so",
-            "/usr/lib/libminizip.so"
-        },
-        __requirestr = "assimp",
-        shared = true,
         envs = {
             PATH = {
-                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
+                "/home/fedora/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/fedora/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
             }
         },
-        version = "6.0.5",
-        __enabled = true
+        license = "Apache-2.0",
+        installdir = "/home/fedora/.xmake/packages/v/vulkan-headers/1.4.335+0/a1c87328203147cfa4c5272cf78b6d5b",
+        __enabled = true,
+        version = "1.4.335+0",
+        sysincludedirs = "/home/fedora/.xmake/packages/v/vulkan-headers/1.4.335+0/a1c87328203147cfa4c5272cf78b6d5b/include"
     },
-    imgui = {
-        sysincludedirs = {
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include",
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/imgui",
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/backends",
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/misc/cpp"
+    fmt = {
+        __requirestr = "fmt",
+        envs = {
+            PATH = {
+                "/home/fedora/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/fedora/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
+            }
         },
         __enabled = true,
         __requireconfs = {
-            configs = {
-                vulkan = true,
-                sdl3 = true
-            }
+            system = true
         },
-        installdir = "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845",
-        version = "v1.92.9",
-        libfiles = {
-            "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib/libimgui.a",
-            "/usr/lib/libSDL3.so",
-            "/usr/lib/libSDL3_test.a"
-        },
-        __requirestr = "imgui",
-        links = {
-            "imgui",
-            "SDL3"
-        },
-        static = true,
-        envs = {
-            PATH = {
-                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin",
-                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
-                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
-                "/home/rhacker/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
-                "/home/rhacker/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2/bin",
-                "/home/rhacker/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee/bin",
-                "/home/rhacker/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5/bin",
-                "/home/rhacker/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
-                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
-                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
-            },
-            PYTHONPATH = {
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
-            },
-            LD_LIBRARY_PATH = {
-                "/home/rhacker/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
-                "/home/rhacker/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
-                "/home/rhacker/.xmake/packages/l/libxcb/1.17.0/8212376093344ea7a7a61a715b1bcdd5/lib",
-                "/home/rhacker/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib",
-                "/home/rhacker/.xmake/packages/l/libxfixes/6.0.1/32cbba7be85a4185b00b52ca82de8150/lib",
-                "/home/rhacker/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
-                "/home/rhacker/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
-            }
-        },
-        linkdirs = "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib",
-        license = "MIT"
+        libfiles = "/usr/lib64/libfmt.so",
+        links = "fmt",
+        version = "11.2.0",
+        shared = true
     },
     ["vulkan-loader"] = {
-        defines = "WITH_GZFILEOP",
-        shared = true,
+        linkdirs = {
+            "/home/fedora/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib",
+            "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8/lib"
+        },
+        __enabled = true,
         links = {
             "vulkan",
             "Xrandr",
             "Xext",
             "Xrender",
             "X11",
-            "X11-xcb",
             "xcb",
-            "xcb-composite",
-            "xcb-damage",
-            "xcb-dbe",
-            "xcb-dpms",
-            "xcb-dri2",
-            "xcb-dri3",
-            "xcb-glx",
-            "xcb-present",
-            "xcb-randr",
-            "xcb-record",
-            "xcb-render",
-            "xcb-res",
-            "xcb-screensaver",
-            "xcb-shape",
-            "xcb-shm",
-            "xcb-sync",
-            "xcb-xf86dri",
-            "xcb-xfixes",
-            "xcb-xinerama",
-            "xcb-xinput",
-            "xcb-xkb",
-            "xcb-xtest",
-            "xcb-xv",
-            "xcb-xvmc",
             "Xau",
-            "Xdmcp",
             "xkbcommon",
-            "xkbregistry",
+            "wayland-server",
+            "wayland-client",
             "wayland-cursor",
             "wayland-egl",
-            "wayland-client",
-            "wayland-server",
-            "m",
             "xml2",
             "ffi",
             "expat"
         },
-        libfiles = {
-            "/usr/lib/libvulkan.so",
-            "/usr/lib/libXrandr.so",
-            "/usr/lib/libXext.so",
-            "/usr/lib/libXrender.so",
-            "/usr/lib/libX11.so",
-            "/usr/lib/libX11-xcb.so",
-            "/usr/lib/libxcb-composite.so",
-            "/usr/lib/libxcb-damage.so",
-            "/usr/lib/libxcb-dbe.so",
-            "/usr/lib/libxcb-dpms.so",
-            "/usr/lib/libxcb-dri2.so",
-            "/usr/lib/libxcb-dri3.so",
-            "/usr/lib/libxcb-glx.so",
-            "/usr/lib/libxcb-present.so",
-            "/usr/lib/libxcb-randr.so",
-            "/usr/lib/libxcb-record.so",
-            "/usr/lib/libxcb-render.so",
-            "/usr/lib/libxcb-res.so",
-            "/usr/lib/libxcb-screensaver.so",
-            "/usr/lib/libxcb-shape.so",
-            "/usr/lib/libxcb-shm.so",
-            "/usr/lib/libxcb-sync.so",
-            "/usr/lib/libxcb-xf86dri.so",
-            "/usr/lib/libxcb-xfixes.so",
-            "/usr/lib/libxcb-xinerama.so",
-            "/usr/lib/libxcb-xinput.so",
-            "/usr/lib/libxcb-xkb.so",
-            "/usr/lib/libxcb-xtest.so",
-            "/usr/lib/libxcb-xv.so",
-            "/usr/lib/libxcb-xvmc.so",
-            "/usr/lib/libxcb.so",
-            "/usr/lib/libXau.so",
-            "/usr/lib/libXdmcp.so",
-            "/usr/lib/libxkbcommon.so",
-            "/usr/lib/libxkbregistry.so",
-            "/usr/lib/libwayland-client.so",
-            "/usr/lib/libwayland-cursor.so",
-            "/usr/lib/libwayland-egl.so",
-            "/usr/lib/libwayland-server.so",
-            "/usr/lib/libxml2.so",
-            "/usr/lib/libffi.so",
-            "/usr/lib/libexpat.so"
-        },
+        installdir = "/home/fedora/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293",
+        shared = true,
         __requirestr = "vulkan-loader",
-        sysincludedirs = "/usr/include/libxml2",
         envs = {
-            PATH = {
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
-                "/home/rhacker/.xmake/packages/m/meson/1.11.1/bc667617473645e7adb5e27709bfda8b/bin",
-                "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
-                "/home/rhacker/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin",
-                "/home/rhacker/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
-                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
-                "/home/rhacker/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
-                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
-                "/home/rhacker/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin"
-            },
             PYTHONPATH = {
-                "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
+            },
+            SSL_CERT_DIR = {
+                "/home/fedora/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
+            },
+            PATH = {
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
+                "/home/fedora/.xmake/packages/m/meson/1.12.0/42ccd5f432e84595b0840a12b029c615/bin",
+                "/home/fedora/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/fedora/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin",
+                "/home/fedora/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
+                "/home/fedora/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
+                "/home/fedora/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
+                "/home/fedora/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8/bin",
+                "/home/fedora/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin"
+            },
+            SSL_CERT_FILE = {
+                "/home/fedora/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
             },
             LD_LIBRARY_PATH = {
-                "/home/rhacker/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib",
-                "/home/rhacker/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
-                "/home/rhacker/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
-                "/home/rhacker/.xmake/packages/l/libxcb/1.17.0/8212376093344ea7a7a61a715b1bcdd5/lib",
-                "/home/rhacker/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib"
+                "/home/fedora/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib",
+                "/home/fedora/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
+                "/home/fedora/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
+                "/home/fedora/.xmake/packages/l/libxcb/1.17.0/8212376093344ea7a7a61a715b1bcdd5/lib",
+                "/home/fedora/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib"
             }
         },
+        license = "Apache-2.0",
+        libfiles = {
+            "/home/fedora/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib/libvulkan.so",
+            "/home/fedora/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib/libvulkan.so.1.4.335",
+            "/home/fedora/.xmake/packages/v/vulkan-loader/1.4.335+0/052416fc76594d70ba67383a96987293/lib/libvulkan.so.1",
+            "/usr/lib64/libXrandr.so",
+            "/usr/lib64/libXext.so",
+            "/usr/lib64/libXrender.so",
+            "/usr/lib64/libX11.so",
+            "/usr/lib64/libxcb.so",
+            "/usr/lib64/libXau.so",
+            "/usr/lib64/libxkbcommon.so",
+            "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8/lib/libwayland-server.a",
+            "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8/lib/libwayland-client.a",
+            "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8/lib/libwayland-cursor.a",
+            "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8/lib/libwayland-egl.a",
+            "/usr/lib64/libxml2.so",
+            "/usr/lib64/libffi.so",
+            "/usr/lib64/libexpat.so"
+        },
+        defines = "WITH_GZFILEOP",
+        version = "1.4.335+0",
+        sysincludedirs = {
+            "/home/fedora/.xmake/packages/w/wayland/1.25.0/44c2fda08dba461698ba3ee28d3b21d8/include",
+            "/usr/include/libxml2",
+            "/home/fedora/.xmake/packages/v/vulkan-headers/1.4.335+0/a1c87328203147cfa4c5272cf78b6d5b/include"
+        }
+    },
+    cglm = {
+        linkdirs = "/home/fedora/.xmake/packages/c/cglm/v0.9.6/e4e478c35c554e10ba5ec0f3cdb90e31/lib",
         __enabled = true,
-        version = "1.4.357"
+        links = "cglm",
+        installdir = "/home/fedora/.xmake/packages/c/cglm/v0.9.6/e4e478c35c554e10ba5ec0f3cdb90e31",
+        __requirestr = "cglm",
+        envs = {
+            PATH = {
+                "/home/fedora/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/fedora/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
+            }
+        },
+        license = "MIT",
+        libfiles = "/home/fedora/.xmake/packages/c/cglm/v0.9.6/e4e478c35c554e10ba5ec0f3cdb90e31/lib/libcglm.a",
+        static = true,
+        version = "v0.9.6",
+        sysincludedirs = "/home/fedora/.xmake/packages/c/cglm/v0.9.6/e4e478c35c554e10ba5ec0f3cdb90e31/include"
     },
     stb = {
-        version = "r2232.2c980bb",
         __requirestr = "stb",
-        __enabled = true
+        __enabled = true,
+        installdir = "/home/fedora/.xmake/packages/s/stb/2026.03.18/620c927292e84953b864706d39cf4a30",
+        version = "2026.03.18",
+        sysincludedirs = {
+            "/home/fedora/.xmake/packages/s/stb/2026.03.18/620c927292e84953b864706d39cf4a30/include",
+            "/home/fedora/.xmake/packages/s/stb/2026.03.18/620c927292e84953b864706d39cf4a30/include/stb"
+        }
+    },
+    imgui = {
+        linkdirs = "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib",
+        __enabled = true,
+        __requireconfs = {
+            configs = {
+                sdl3 = true,
+                vulkan = true
+            }
+        },
+        installdir = "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845",
+        __requirestr = "imgui",
+        envs = {
+            PYTHONPATH = {
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/lib/python3.14/site-packages"
+            },
+            SSL_CERT_DIR = {
+                "/home/fedora/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20"
+            },
+            SSL_CERT_FILE = {
+                "/home/fedora/.xmake/packages/c/ca-certificates/20250131/e9ba281ae183402a80dc072d4d571c20/cacert.pem"
+            },
+            PATH = {
+                "/home/fedora/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/fedora/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin",
+                "/home/fedora/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/fedora/.xmake/packages/p/pkg-config/0.29.2/a0aba256d7674c1bbee15f0ee1534e92/bin",
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/bin",
+                "/home/fedora/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38/Scripts",
+                "/home/fedora/.xmake/packages/m/m4/1.4.19/8b7c7260096844c1a8b1c8d773e64b3d/bin",
+                "/home/fedora/.xmake/packages/a/autoconf/2.72/acf1540df7454fb895001231995955f2/bin",
+                "/home/fedora/.xmake/packages/a/automake/1.17/023583104f8e4bd8aa209b66cbeb4bee/bin",
+                "/home/fedora/.xmake/packages/l/libtool/2.6.0/e0bdba70c39545bb9c3dcc8050ee49d5/bin",
+                "/home/fedora/.xmake/packages/m/meson/1.12.0/42ccd5f432e84595b0840a12b029c615/bin",
+                "/home/fedora/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin",
+                "/home/fedora/.xmake/packages/b/bison/3.8.2/9487e874749340f7949f47fa547bc060/bin"
+            },
+            LD_LIBRARY_PATH = {
+                "/home/fedora/.xmake/packages/l/libxau/1.0.12/f28a3a7249e64bfeafc481e65ce195a9/lib",
+                "/home/fedora/.xmake/packages/l/libxdmcp/1.1.5/fac034d258af4aada2c864884ac5f660/lib",
+                "/home/fedora/.xmake/packages/l/libxcb/1.17.0/8212376093344ea7a7a61a715b1bcdd5/lib",
+                "/home/fedora/.xmake/packages/l/libx11/1.8.13/fa5de29573fd426583b062bb45cc2a89/lib",
+                "/home/fedora/.xmake/packages/l/libxfixes/6.0.1/32cbba7be85a4185b00b52ca82de8150/lib",
+                "/home/fedora/.xmake/packages/l/libxrender/0.9.12/504f602166aa49fcb7386ef0f2d67c9b/lib",
+                "/home/fedora/.xmake/packages/l/libxext/1.3.7/f2028efa1de84bdb8bcf174232090114/lib"
+            }
+        },
+        license = "MIT",
+        links = {
+            "imgui",
+            "SDL3"
+        },
+        libfiles = {
+            "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/lib/libimgui.a",
+            "/usr/lib64/libSDL3.so"
+        },
+        static = true,
+        version = "v1.92.9",
+        sysincludedirs = {
+            "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include",
+            "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/imgui",
+            "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/backends",
+            "/home/fedora/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845/include/misc/cpp",
+            "/home/fedora/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff/include",
+            "/home/fedora/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03/include",
+            "/home/fedora/.xmake/packages/v/vulkan-headers/1.4.335+0/a1c87328203147cfa4c5272cf78b6d5b/include"
+        }
+    },
+    assimp = {
+        linkdirs = "/home/fedora/.xmake/packages/m/minizip/v1.3.2/0ff7531875cc4695af8b3df658348c6e/lib",
+        __enabled = true,
+        links = {
+            "assimp",
+            "minizip",
+            "z"
+        },
+        shared = true,
+        __requirestr = "assimp",
+        envs = {
+            PATH = {
+                "/home/fedora/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6/bin",
+                "/home/fedora/.xmake/packages/c/cmake/4.3.4/478c5cdb1d4b47ff91b42b2ceeb382a8/bin"
+            }
+        },
+        libfiles = {
+            "/usr/lib64/libassimp.so",
+            "/home/fedora/.xmake/packages/m/minizip/v1.3.2/0ff7531875cc4695af8b3df658348c6e/lib/libminizip.a"
+        },
+        __requireconfs = {
+            system = true
+        },
+        version = "6.0.5",
+        sysincludedirs = {
+            "/home/fedora/.xmake/packages/m/minizip/v1.3.2/0ff7531875cc4695af8b3df658348c6e/include",
+            "/home/fedora/.xmake/packages/m/minizip/v1.3.2/0ff7531875cc4695af8b3df658348c6e/include/minizip"
+        }
     }
 }
