@@ -7,6 +7,9 @@ add_requires("assimp")
 add_requires("fmt")
 add_requires("imgui", {configs = {sdl3 = true, vulkan = true}})
 
+set_languages("c++20")
+add_rules("plugin.compile_commands.autoupdate", {outputdir = "."})
+
 target("NGE")
     set_kind("static")
     add_files("root/core/src/*.cpp")

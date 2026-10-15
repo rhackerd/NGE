@@ -1,7 +1,10 @@
 {
     packages = {
         "/home/rhacker/.xmake/packages/n/ninja/v1.13.2/0a9451759a4647b5923438b464085dd6",
+        "/home/rhacker/.xmake/packages/v/vulkan-headers/1.4.335+0/a1c87328203147cfa4c5272cf78b6d5b",
         "/home/rhacker/.xmake/packages/p/python/3.14.3/5b29e409d339499392171d61390dfc38",
+        "/home/rhacker/.xmake/packages/e/egl-headers/2023.12.16/cd777b21b8c84268bf5e21c2813eae03",
+        "/home/rhacker/.xmake/packages/o/opengl-headers/2024.01.04/59ed79d7030a4b298d033d457b08e5ff",
         "/home/rhacker/.xmake/packages/i/imgui/v1.92.9/f90b6398a4194377b5a5feef8f2ea845"
     }
 }
