@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vulkan/vulkan.hpp"
+#include <stdexcept>
 #include <string>
 #include <vulkan/vulkan_core.h>
 #include "core.h"
@@ -45,6 +46,8 @@ namespace Nova::GE {
         public:
             void init(const std::string& path, vk::ShaderStageFlagBits stage ,vk::Device* device) {
                 auto code = readFile(path);
+                if (code.empty())
+                    throw std::runtime_error("Failed to load shader '" + path + "' (is the working directory the repo root?)");
                 vk::ShaderModuleCreateInfo moduleCi;
                 moduleCi.codeSize = code.size();
                 moduleCi.pCode = reinterpret_cast<const uint32_t*>(code.data());

@@ -26,3 +26,5 @@ CMakeFiles
 bin
 .cache
 compile_commands.json
+# xmake build cache
+.xmake

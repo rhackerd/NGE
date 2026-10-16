@@ -156,7 +156,7 @@ namespace Nova::GE {
         private:
             vk::SurfaceFormat2KHR chooseFormat();
             uint32_t              chooseOptimalImgCount();
-            void                  setupQueueSharing(vk::SwapchainCreateInfoKHR& createInfo);
+            void                  setupQueueSharing(vk::SwapchainCreateInfoKHR& createInfo, uint32_t (&queueFamilies)[2]);
             vk::PresentModeKHR    choosePresentMode();
             void                  updateExtent();
     

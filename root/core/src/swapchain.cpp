@@ -48,10 +48,11 @@ namespace Nova::GE {
             extent[1] = surfaceCaps.currentExtent.height;
             
         }else {
+            // Surface size is decided by the swapchain, use the window size in pixels (not points)
             int width, height;
-            SDL_GetWindowSize(window, &width, &height); // This should be later integrated to Nova Desktop
-            extent[0] = width;
-            extent[1] = height;
+            SDL_GetWindowSizeInPixels(window, &width, &height); // This should be later integrated to Nova Desktop
+            extent[0] = std::clamp<uint32_t>(width,  surfaceCaps.minImageExtent.width,  surfaceCaps.maxImageExtent.width);
+            extent[1] = std::clamp<uint32_t>(height, surfaceCaps.minImageExtent.height, surfaceCaps.maxImageExtent.height);
         }
 
         vk::SampleCountFlags Csupported = device->getPhysicalDevice().getProperties().limits.framebufferColorSampleCounts;
@@ -63,7 +64,6 @@ namespace Nova::GE {
         vk::SurfaceFormat2KHR surfaceFormat = chooseFormat();
         m_format = surfaceFormat.surfaceFormat.format;
         vk::PresentModeKHR pMode = choosePresentMode();
-        glm_vec2_copy(createInfo.extent, extent);
 
         imageCount = chooseOptimalImgCount();
         vk::SwapchainCreateInfoKHR aci{};
@@ -75,7 +75,8 @@ namespace Nova::GE {
         .setImageArrayLayers(1)
         .setImageUsage(vk::ImageUsageFlagBits::eColorAttachment);
 
-        setupQueueSharing(aci);
+        uint32_t queueFamilies[2];
+        setupQueueSharing(aci, queueFamilies);
 
         aci.setPreTransform(caps.surfaceCapabilities.currentTransform)
         .setCompositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque)
@@ -118,6 +119,8 @@ namespace Nova::GE {
         device->getDevice().destroySwapchainKHR(swapchain, nullptr, device->getDld());
         swapchain = VK_NULL_HANDLE;
         m_depthImagesPtrs.clear();
+        m_msColorImagePtrs.clear();
+        m_msColorImageViews.clear();
         m_depthImages.clear();
         m_depthImagesViews.clear();
         m_depthAllocations.clear();
@@ -218,14 +221,16 @@ namespace Nova::GE {
         vk::Result res = device->getDevice().acquireNextImage2KHR(&anii, &imageIndex, device->getDld());
         
         // Handle special cases
-        if (res == vk::Result::eErrorOutOfDateKHR || res == vk::Result::eSuboptimalKHR) {
+        if (res == vk::Result::eErrorOutOfDateKHR) {
             // Swapchain needs recreation (window resized, etc.)
             handleRecreation();
             return false;
         }
-        
-        if (res != vk::Result::eSuccess) {
-            printf("swapchain advanceFrame(): failed ti acquire swapchain image %s", vk::to_string(res).c_str());
+
+        // eSuboptimalKHR still acquired an image and will signal imageAvailable,
+        // so it has to be rendered and presented, recreation happens after present.
+        if (res != vk::Result::eSuccess && res != vk::Result::eSuboptimalKHR) {
+            printf("swapchain advanceFrame(): failed to acquire swapchain image %s\n", vk::to_string(res).c_str());
             return false;
         }
         // print res every 10 or 20 frames
@@ -253,8 +258,6 @@ namespace Nova::GE {
         m_createInfo.extent[0] = w;
         m_createInfo.extent[1] = h;
         init(m_createInfo);           // FIX: use stored createInfo
-        extent[0] = w;
-        extent[1] = h;
     }
 
     void Swapchain::setupMSColorBuffer() {
@@ -262,7 +265,7 @@ namespace Nova::GE {
         m_msColorImageViews.resize(images.size());
 
         // NINFO("Making MSAA color buffer @ {} samples", vk::to_string(m_sampleCount));
-        printf("swapchain setupMSColorBuffer(): making MSAA color buffer @ %zu samples", m_sampleCount);
+        printf("swapchain setupMSColorBuffer(): making MSAA color buffer @ %s samples\n", vk::to_string(m_sampleCount).c_str());
         for (size_t i = 0; i < images.size(); i++) {
             Nova::GE::CreateInfo::Image imageCI = Nova::GE::CreateInfo::Image::Builder()
                 .setExtent(extent)
@@ -281,6 +284,6 @@ namespace Nova::GE {
             m_msColorImageViews[i] = image.lock()->resolve(view);
         }
         // NINFO("Made {} MSAA color Images sucessfully", images.size());
-        printf("swapchain setupMSColorBuffer(): made %zu MSAA color images successfully", images.size());
+        printf("swapchain setupMSColorBuffer(): made %zu MSAA color images successfully\n", images.size());
     }
 };

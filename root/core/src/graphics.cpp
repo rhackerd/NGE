@@ -53,16 +53,24 @@ namespace Nova::Graphics {
             .build();
         if(!m_swapchain.init(scCI)) return false;
 
-        m_window = window;
+        m_window  = window;
+        m_surface = surface;
 
         return true;
     }
 
     void Graphics::shutdown() {
+        if (m_window == nullptr) return; // not initialized or already shut down (dtor after manual shutdown)
         m_swapchain.shutdown();
-        SDL_DestroyWindowSurface(m_window);
-        SDL_DestroyWindow(m_window);
         m_device.shutdown();
+        // VkSurfaceKHR must be destroyed after the swapchain and before the instance
+        // (SDL_DestroyWindowSurface is for SDL's software surface, not Vulkan)
+        if (m_surface != VK_NULL_HANDLE) {
+            SDL_Vulkan_DestroySurface(m_system.getInstance(), m_surface, nullptr);
+            m_surface = VK_NULL_HANDLE;
+        }
+        SDL_DestroyWindow(m_window);
+        m_window = nullptr;
         m_system.shutdown();
     };
 };

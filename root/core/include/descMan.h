@@ -67,9 +67,14 @@ namespace Nova::GE {
             return m_bindlessSet;
         }
 
+        static constexpr u32 InvalidTextureSlot = UINT32_MAX;
+
         u32 allocateTextureSlot() {
             std::lock_guard lock(m_textureMutex);
-            if (m_freeTextureSlots.empty()) printf("DescMan allocateTextureSlot(): error, no empty free slots\n");
+            if (m_freeTextureSlots.empty()) {
+                printf("DescMan allocateTextureSlot(): error, no empty free slots\n");
+                return InvalidTextureSlot;
+            }
             u32 slot = m_freeTextureSlots.back();
             m_freeTextureSlots.pop_back();
             return slot;

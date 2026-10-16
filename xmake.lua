@@ -1,4 +1,5 @@
 add_rules("mode.debug", "mode.release")
+set_languages("c++20")
 
 add_requires("stb")
 add_requires("vulkan-headers")
@@ -7,6 +8,7 @@ add_requires("assimp", {system = true})
 add_requires("fmt", {system = true})
 add_requires("imgui", {configs = {sdl3 = true, vulkan = true}})
 add_requires("cglm")
+add_requires("libsdl3")
 
 target("NGE")
     set_kind("static")
@@ -19,6 +21,7 @@ target("NGE")
     add_packages("stb", {public = true})
     add_packages("imgui", {public = true})
     add_packages("cglm", {public = true})
+    add_packages("libsdl3", {public = true})
     
 target("app")
     set_kind("binary")

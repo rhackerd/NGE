@@ -32,6 +32,7 @@ namespace Nova::GE::Render {
         
             slot.secondaries.resize(secondariesPerPool);
             for (u32 i = 0; i < secondariesPerPool; ++i) {
+                slot.secondaries[i] = makeRef<CommandBuffer>();
                 slot.secondaries[i]->set(scbs[i]);
             }    
         }
@@ -251,6 +252,10 @@ CBSlot* CPUF::batchSubmit(RenderTarget& target, std::vector<std::function<void(C
     }
 
     void CPUF::shutdown() {
+        // Destroying a pool frees its command buffers
+        for (auto& slot : m_pools)
+            if (slot.pool) m_device->getDevice().destroyCommandPool(slot.pool);
+        m_pools.clear();
         m_cmds.clear();
         m_sCmds.clear();
     };

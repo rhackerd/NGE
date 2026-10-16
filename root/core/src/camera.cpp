@@ -129,7 +129,8 @@ namespace Nova::GE {
 
         if (hasRotation) {
             mat4 t, r;
-            glm_translate_make(t, (vec3){ -m_pos[0], -m_pos[1], -m_pos[2] });
+            vec3 negPos = { -m_pos[0], -m_pos[1], -m_pos[2] };
+            glm_translate_make(t, negPos);
             glm_quat_mat4(m_rotation, r);
             glm_mat4_transpose(r);
             glm_mat4_mul(r, t, m_data.view); // r * t

@@ -236,7 +236,7 @@ namespace Nova::GE {
         auto shader = makeRef<Shader>(path, stage, &mLogicalDevice);
 
         // NOVA_INFO(*log, "Created {} shader from {}", vk::to_string(stage), path);
-        printf("device(%i) createShader(): done\n");
+        printf("device(%i) createShader(): done\n", devId);
         shaders.push_back(shader);
         return shader;
     }
@@ -354,6 +354,10 @@ namespace Nova::GE {
         mLogicalDevice.destroyFence(fence);
         staging.shutdown();
         fence = VK_NULL_HANDLE;
+
+        // One-shot command buffer, give it back to the pool
+        mLogicalDevice.freeCommandBuffers(commandPool, cmd);
+        commandBuffers.erase(std::remove(commandBuffers.begin(), commandBuffers.end(), _cb), commandBuffers.end());
     };
 
 };

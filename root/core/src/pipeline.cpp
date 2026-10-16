@@ -23,6 +23,9 @@ namespace Nova::GE {
         .setDynamicStates(ci.dynamicStates);
 
 
+        // The builder's pointers refer to its deleted heap copy, re-point them at this ci
+        ci.colorBlending.pAttachments = &ci.colorBlendAttachment;
+
         ci.vertexLayout
         .setVertexBindingDescriptionCount(1)
         .setPVertexBindingDescriptions(&ci.binding)

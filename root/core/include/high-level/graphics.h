@@ -26,6 +26,7 @@ namespace Nova::Graphics {
         Nova::GE::System    m_system;
         Nova::GE::Device    m_device;
         Nova::GE::Swapchain m_swapchain;
-        SDL_Window*         m_window;
+        SDL_Window*         m_window  = nullptr;
+        VkSurfaceKHR        m_surface = VK_NULL_HANDLE;
     };
 }

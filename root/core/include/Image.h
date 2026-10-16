@@ -167,7 +167,7 @@ namespace Nova::GE {
         private:
             vk::Image image;
             vk::Format format;
-            VmaAllocation alloc;
+            VmaAllocation alloc = VK_NULL_HANDLE;
             vk::ImageCreateInfo info;
             
             vec2 extent;

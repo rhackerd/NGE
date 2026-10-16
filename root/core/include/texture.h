@@ -34,6 +34,6 @@ namespace Nova::GE {
 
         private:
             u32 m_slot = 0;
-            DescriptorMan* m_c_dman;
+            DescriptorMan* m_c_dman = nullptr;
     };
 };

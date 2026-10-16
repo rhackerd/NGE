@@ -45,7 +45,7 @@ namespace Nova::GE::Render {
         class CPUF::Builder {
             private: CPUF* info;
             public:
-                Builder() { info->secondaryCount = 8; }
+                Builder() : info(new CPUF()) {}
                 Builder& setSecondaryCount(u32 count)   { info->secondaryCount = count; return *this; }
                 Builder& setDevice(Device& device)      { info->device = &device;       return *this; }
                 Builder& setNumPools(u16 num)           { info->numPools = num;         return *this; }
@@ -140,7 +140,8 @@ namespace Nova::GE::Render {
             addressInfo.setBuffer(device->getDescriptorManager().buffer());
             vk::DeviceAddress addr = device->getDevice().getBufferAddress(addressInfo, device->getDld());
             bindingInfo.setAddress(addr)
-                .setUsage(vk::BufferUsageFlagBits::eResourceDescriptorBufferEXT);
+                .setUsage(vk::BufferUsageFlagBits::eResourceDescriptorBufferEXT
+                        | vk::BufferUsageFlagBits::eSamplerDescriptorBufferEXT);
             m_cb.bindDescriptorBuffersEXT(bindingInfo, device->getDld());
         }
 

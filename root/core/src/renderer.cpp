@@ -86,6 +86,10 @@ namespace Nova::Graphics {
             return;
         }
 
+        // Image count can change when the swapchain gets recreated
+        while (m_renderFinished.size() < m_swapchain->getImages().size())
+            m_renderFinished.push_back(device.createSemaphore({}));
+
         for (auto camera : m_cameras)
             camera->update();
 
@@ -105,12 +109,14 @@ namespace Nova::Graphics {
                 // cmd.pushConstant(objectPos, pipeline.lock()->getLayout());
                 // cmd.drawMesh(mesh);
                 auto camera = scene.camera.lock();
+                if (!camera) return;
                 // cmd.bindSet(0, camera->getHandle(), m_pipelineLayout);
                 cmd.bindSet(camera->getHandle());
                 // cmd.bindSet(0, camera->getHandle(), m_pipelineLayout);
                 // cmd.bindSet(m_device->getDescriptorManager().getBindlessSet());
                 for (auto& objRef : scene.objects) {
                     auto obj = objRef.lock();
+                    if (!obj || !obj->getMesh().isValid()) continue; // expired or mesh failed to load
                     
                     auto& texSet = obj->getTexSet();
                     cmd.bindSet(texSet);
@@ -140,28 +146,42 @@ namespace Nova::Graphics {
         presentInfo.setWaitSemaphores(renderFinished).setSwapchainCount(1);
         presentInfo.pSwapchains   = &sc;
         presentInfo.pImageIndices = &idx;
-        m_device->getPresentQueue().presentKHR(presentInfo);
+        // Pointer overload: the reference one throws vk::OutOfDateKHRError on resize
+        vk::Result presentRes = m_device->getPresentQueue().presentKHR(&presentInfo);
+        if (presentRes == vk::Result::eErrorOutOfDateKHR || presentRes == vk::Result::eSuboptimalKHR) {
+            m_swapchain->handleRecreation();
+            for (auto camera : m_cameras)
+                camera->setAspect(m_swapchain->getExtent().width / (float)m_swapchain->getExtent().height);
+        }
 
     };
 
     void Renderer::shutdown() {
         if (m_device == nullptr) return;
 
-        sampler.Shutdown();
-
-        m_device->getDevice().destroyDescriptorSetLayout(m_cameraLayout.layout);
-        m_device->getDevice().destroyDescriptorSetLayout(m_texLayout.layout);
-
+        // GPU may still use everything below
         m_device->getDevice().waitIdle();
+
         for (auto camera : m_cameras) {
             camera->shutdown();
         }
         for (auto object : m_objects) {
             object->shutdown();
         }
+        // Release them now, not after Graphics (and the device) was shut down
+        m_cameras.clear();
+        m_objects.clear();
+        m_textures.clear();
+
+        m_cpuf.shutdown();
+        sampler.Shutdown();
+
+        m_device->getDevice().destroyDescriptorSetLayout(m_cameraLayout.layout);
+        m_device->getDevice().destroyDescriptorSetLayout(m_texLayout.layout);
 
         for (auto s : m_renderFinished)
             m_device->getDevice().destroySemaphore(s);
+        m_renderFinished.clear();
         m_device->getDevice().destroyFence(m_fence);
         m_device = nullptr; 
     }

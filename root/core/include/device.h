@@ -63,7 +63,10 @@ namespace Nova::GE {
 
                             return *this;
                         }
-                        info->mPhysicalDevice  = info->system->getInstance().enumeratePhysicalDevices().front();
+                        auto devices = info->system->getInstance().enumeratePhysicalDevices();
+                        if (devices.empty())
+                            throw std::runtime_error("No Vulkan capable physical device found!");
+                        info->mPhysicalDevice  = devices.front();
                         return *this;
                     };
 
@@ -97,8 +100,9 @@ namespace Nova::GE {
                         return *this;
                     }
 
-                    Builder& addExtension(const std::string& extension) {
-                        info->extensions.push_back(extension.c_str());
+                    // Stores the pointer as-is, so it must outlive init() (e.g. a string literal or VK_*_EXTENSION_NAME)
+                    Builder& addExtension(const char* extension) {
+                        info->extensions.push_back(extension);
                         return *this;
                     }
 

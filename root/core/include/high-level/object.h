@@ -22,7 +22,10 @@ namespace Nova::Graphics {
         };
         void loadTexture(const std::string& path) {
             m_texture = GE::makeRef<GE::Texture>();
-            m_texture->init(path, *device, sampler->getSampler());
+            if (!m_texture->init(path, *device, sampler->getSampler())) {
+                m_texture = nullptr;
+                return;
+            }
             sampler->Bind(*dMan, handle, *m_texture);
         }
         void init(GE::Device* device, VmaAllocator allocator, GE::DescriptorMan* dMan, GE::SetHandle& setHandle, GE::ImageSampler* sampler) {

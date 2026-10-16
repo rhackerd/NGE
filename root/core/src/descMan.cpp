@@ -1,5 +1,6 @@
 #include "descMan.h"
 
+#include <cstdlib>
 #include <fmt/format.h>
 
 namespace Nova::GE {
@@ -29,7 +30,9 @@ namespace Nova::GE {
         VkBufferCreateInfo bufCI{
             .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
             .size  = size,
-            .usage = VK_BUFFER_USAGE_2_RESOURCE_DESCRIPTOR_BUFFER_BIT_EXT |
+            // Holds both sampler and resource descriptors
+            .usage = VK_BUFFER_USAGE_RESOURCE_DESCRIPTOR_BUFFER_BIT_EXT |
+                     VK_BUFFER_USAGE_SAMPLER_DESCRIPTOR_BUFFER_BIT_EXT |
                      VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT,
         };
         VmaAllocationCreateInfo allocCI{
@@ -41,7 +44,10 @@ namespace Nova::GE {
         m_capacity = size;
 
         VkBuffer buffer;
-        vmaCreateBuffer(allocator, &bufCI, &allocCI, &buffer, &m_allocation, &m_info);
+        if (vmaCreateBuffer(allocator, &bufCI, &allocCI, &buffer, &m_allocation, &m_info) != VK_SUCCESS) {
+            printf("DescMan init(): failed to create descriptor buffer\n");
+            std::abort();
+        }
         m_buffer = buffer;
         m_ptr    = m_info.pMappedData;
 
@@ -125,7 +131,9 @@ namespace Nova::GE {
             SDL_Log("allocateSet: layout=%p size=%zu base=%zu -> new m_offset=%zu",
                     (void*)VkDescriptorSetLayout(setLayout), size, base, base + size);
             if (base + size > m_capacity) {
-                printf("%s", fmt::format("Descriptor buffer arena exhausted ({} / {} bytes)", base + size, m_capacity).c_str());
+                // Writing past the mapped buffer would corrupt memory, so this is fatal
+                printf("%s\n", fmt::format("Descriptor buffer arena exhausted ({} / {} bytes)", base + size, m_capacity).c_str());
+                std::abort();
             }
             m_offset = base + size;
         }
@@ -142,7 +150,10 @@ namespace Nova::GE {
 
         #ifndef NDEBUG
         auto it = m_liveOffsets.find(set.baseOffset);
-        // NOVA_ASSERT(it != m_liveOffsets.end(), "freeSet called on an offset that isn't currently allocated (double-free?)");
+        if (it == m_liveOffsets.end()) {
+            printf("DescMan freeSet(): offset %zu isn't currently allocated (double-free?)\n", set.baseOffset);
+            return;
+        }
         m_liveOffsets.erase(it);
         #endif
 

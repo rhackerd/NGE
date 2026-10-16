@@ -28,10 +28,11 @@ namespace Nova::GE {
 
         auto& descMan = device.getDescriptorManager();
 
-        const u32 slot = descMan.allocateTextureSlot();
+        m_slot = descMan.allocateTextureSlot();
+        if (m_slot == DescriptorMan::InvalidTextureSlot) return false;
 
-
-        descMan.writeTextureSlot(slot, getImageView(), vk::ImageLayout::eReadOnlyOptimal);
+        // uploadToImage() leaves the image in eShaderReadOnlyOptimal
+        descMan.writeTextureSlot(m_slot, getImageView(), vk::ImageLayout::eShaderReadOnlyOptimal);
     
         m_c_dman =  &descMan;
             
@@ -39,7 +40,9 @@ namespace Nova::GE {
     }
 
     void Texture::shutdown() {
+        if (m_c_dman == nullptr) return; // never initialized or already shut down
         m_c_dman->freeTextureSlot(m_slot);
+        m_c_dman = nullptr;
         m_slot = 0;
     }
 };

@@ -6,8 +6,12 @@
 #include <SDL3/SDL_video.h>
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_keyboard.h>
-#include <vector>
+#include <algorithm>
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <vector>
 
 struct FlyCamera {
     float x = 0.0f, y = 5.0f, z = 10.0f;
@@ -57,7 +61,7 @@ int main() {
     auto camera = renderer.createCamera();
     auto _object = renderer.createObject();
     auto object = _object.lock();
-    object->loadMesh("aircraft.obj");
+    object->loadMesh("aircraft.gltf");
 
     camera.lock()->setPerspective(60.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
     camera.lock()->setAspect(800.0f / 600.0f);

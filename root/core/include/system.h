@@ -48,8 +48,9 @@ namespace Nova::GE {
                         return *this;
                     }
 
-                    Builder& addExtension(const std::string& extension) {
-                        info->extensions.push_back(extension.c_str());
+                    // Stores the pointer as-is, so it must outlive init() (e.g. a string literal or VK_*_EXTENSION_NAME)
+                    Builder& addExtension(const char* extension) {
+                        info->extensions.push_back(extension);
                         return *this;
                     }
 
@@ -89,8 +90,7 @@ namespace Nova::GE {
                     }
 
                     Builder& enableValidation() {
-                        info->validation = true;  // ← add
-                        info->extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+                        info->validation = true;  // VK_EXT_debug_utils is added by System::init()
                         return *this;
                     }
 
